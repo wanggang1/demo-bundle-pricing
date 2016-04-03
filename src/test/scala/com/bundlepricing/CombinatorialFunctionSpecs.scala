@@ -1,9 +1,12 @@
 package com.bundlepricing
 
+import com.bundlepricing.domains.Item
+import com.bundlepricing.utils.CombinatorialFunction
+
 /**
  * Unit tests for Bundle
  */
-class CombinatorialFunctionSpecs extends UnitSpec {
+class CombinatorialFunctionSpecs extends UnitSpec with TestData {
 
   import CombinatorialFunction._
   import Item._

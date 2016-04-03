@@ -1,9 +1,12 @@
 package com.bundlepricing
 
+import com.bundlepricing.domains.Bundle
+import com.bundlepricing.domains.Item
+
 /**
  * Unit tests for Bundle
  */
-class BundleSpecs extends UnitSpec {
+class BundleSpecs extends UnitSpec with TestData {
 
   import Bundle._
   import Item._

@@ -1,6 +1,6 @@
-package com.bundlepricing
+package com.bundlepricing.domains
 
-import BundlePrice.SavingPolicy
+import com.bundlepricing.core.Pricing
 
 object Bundle {
   
@@ -14,7 +14,7 @@ object Bundle {
   
 }
 
-case class Bundle(items: List[Item], applyPolicy: SavingPolicy) {
+case class Bundle(items: List[Item], applyPolicy: Pricing) {
   import Bundle._
 
   val key = bundleKey(items)

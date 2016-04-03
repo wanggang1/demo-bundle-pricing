@@ -1,4 +1,4 @@
-package com.bundlepricing
+package com.bundlepricing.utils
 
 object CombinatorialFunction {
   /*
