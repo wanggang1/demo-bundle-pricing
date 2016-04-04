@@ -1,15 +1,13 @@
-package com.bundlepricing
+package com.bundlepricing.utils
 
-import com.bundlepricing.domains.Item
-import com.bundlepricing.utils.CombinatorialFunction
+import com.bundlepricing.{TestData, UnitSpec}
 
 /**
- * Unit tests for Bundle
+ * Unit tests for CombinatorialFunction
  */
 class CombinatorialFunctionSpecs extends UnitSpec with TestData {
 
   import CombinatorialFunction._
-  import Item._
   
   "CombinatorialFunction.subs" must "generate all possible sub-combinations with given items" in {
     Given("items List(Milk, Bread, Apple, Bread)")

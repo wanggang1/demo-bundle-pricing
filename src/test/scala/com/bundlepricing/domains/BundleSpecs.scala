@@ -1,7 +1,6 @@
-package com.bundlepricing
+package com.bundlepricing.domains
 
-import com.bundlepricing.domains.Bundle
-import com.bundlepricing.domains.Item
+import com.bundlepricing.{TestData, UnitSpec}
 
 /**
  * Unit tests for Bundle
@@ -9,7 +8,6 @@ import com.bundlepricing.domains.Item
 class BundleSpecs extends UnitSpec with TestData {
 
   import Bundle._
-  import Item._
   
   "Bundle" must "generate bundle key with given items" in {
     Given("items List(Milk, Bread, Apple, Bread)")
@@ -27,7 +25,7 @@ class BundleSpecs extends UnitSpec with TestData {
     val possibleKeys = keyPermutations(items)
     possibleKeys.size mustBe 12
     
-    And("must contain alll possible keys")
+    And("must contain all possible keys")
     possibleKeys.contains("MilkBreadBreadApple") mustBe true
     possibleKeys.contains("MilkBreadAppleBread") mustBe true
     possibleKeys.contains("MilkAppleBreadBread") mustBe true

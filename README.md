@@ -34,7 +34,7 @@ A customer shops in a grocery store, selects items and any quantity of an item, 
 
 ### Possible Issues
 
-* Handle the bundles that contain exactly the items but different pricing policy (if there is ever a use case for this)
+* Bundles that contain exactly the same items but have different pricing policy (if there is ever a use case for that)
 
 
 
