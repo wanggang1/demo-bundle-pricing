@@ -37,16 +37,6 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   import Bundle._
   
   def pricing(purchasedItems: List[Item]): Future[Double] = {
-    /*
-    val possibleBundles = applicableBundles(purchasedItems)
-    showBundles(possibleBundles)
-
-    val purchases: List[List[Bundle]] = convertToBundles(purchasedItems, possibleBundles)
-    showPurchases(purchases)
-
-    optimizedPrice(purchases) 
-    */
-    
     val bundlesFuture = inventory.getBundles
     for {
       possibleBundles <- applicableBundles(purchasedItems, bundlesFuture)

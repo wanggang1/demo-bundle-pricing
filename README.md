@@ -26,11 +26,15 @@ A customer shops in a grocery store, selects items and any quantity of an item, 
 * Ability to calculate price at checkout
 * Ability to handle multiple simultaneous calls without errors
 
-### Future Consideration
+### TODOs
 
 * User Input Validation
 * Exception Handling
 * Optimization
+
+### Possible Issues
+
+* Handle the bundles that contain exactly the items but different pricing policy (if there is ever a use case for this)
 
 
 
