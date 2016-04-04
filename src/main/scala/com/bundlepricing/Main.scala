@@ -43,26 +43,6 @@ object Main {
     inventory.addItem("PeanutButter", 2.50)
     inventory.addItem("Apple", 1.00)
   }
-  
-  /**
-   * define discount pricing
-   */
-  val buy1Get1Free = (items: List[Item]) => {
-      require(items.size == 2)
-      items.head.price
-    }
-  val buy1Get2ndHalf = (items: List[Item]) => {
-      require(items.size == 2)
-      items.head.price + items.last.price / 2
-    }
-  val buy2Get3rdHalf = (items: List[Item]) => {
-      require(items.size == 3)
-      items(0).price + items(1).price + items(2).price / 2
-    }
-  val buy3Get4thFree = (items: List[Item]) => {
-      require(items.size == 4)
-      items.dropRight(1).map(_.price).foldLeft(0.0)(_ + _)
-    }
 
   def populateBundles(inventory: Inventory)(implicit ec: ExecutionContext): Future[Unit] = {
     for {
