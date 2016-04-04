@@ -12,6 +12,7 @@ object Main {
    * Demo Bundled Price APIs
    */
   def main (args: Array[String]): Unit = {
+    import Demo._
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
     implicit val itemRepo = new ItemRepo
@@ -35,6 +36,10 @@ object Main {
     println(s"Optimized Cost $$$optimizedPrice")
   }
   
+}
+
+object Demo {
+    
   def populateItems(inventory: Inventory): Future[Unit] = {
     inventory.addItem("Milk", 2.99)
     inventory.addItem("Bread", 1.99)
@@ -98,5 +103,5 @@ object Main {
       milk <- inventory.getItem("Milk")
       cereal <- inventory.getItem("Cereal")
     } yield List(bread, bread, peanutbutter, milk, cereal, cereal, cereal, milk)
-  
+    
 }
