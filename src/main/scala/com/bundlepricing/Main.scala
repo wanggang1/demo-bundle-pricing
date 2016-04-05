@@ -15,6 +15,7 @@ object Main {
     import Demo._
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
+
     implicit val itemRepo = new ItemRepo
     implicit val bundleRepo = new BundleRepo
     implicit val inventory = new Inventory
@@ -24,12 +25,12 @@ object Main {
     inventory.showItems()
     inventory.showBundles()
 
-    populateBundles(inventory)
-    Thread.sleep(100)
-    inventory.showBundles()
-    
     println("--Purchase: Bread, Bread, PeanutButter, Milk, Cereal, Cereal, Cereal, Milk---")
     val shoppingcart: List[Item] = Await.result(shoppingCart(inventory), 100 milliseconds) 
+    println("")
+
+    Await.ready(populateBundles(inventory), 100 milliseconds)
+    inventory.showBundles()
     
     val optimizedPrice = Await.result(bundlePrice.pricing(shoppingcart), 1 second) 
     println("")

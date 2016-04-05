@@ -13,7 +13,7 @@ object BundlePrice {
    * for demo purpose only
    */
   def showBundles(bundles: List[Bundle]) = {
-    println("possible bundles:")
+    println("applicable bundles:")
     bundles foreach {println(_)}
     println("")
   }
