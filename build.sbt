@@ -16,3 +16,4 @@ libraryDependencies ++= Seq(
 
 resolvers += Classpaths.sbtPluginReleases
 
+initialCommands in console := "import scala.concurrent.Future, scala.concurrent.ExecutionContext.Implicits.global"

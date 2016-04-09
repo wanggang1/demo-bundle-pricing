@@ -51,58 +51,60 @@ object Demo {
   }
 
   def populateBundles(inventory: Inventory)(implicit ec: ExecutionContext): Future[Unit] = {
-    for {
-      apple <- inventory.getItem("Apple")
-      unit = inventory.addBundledPrice(List.fill(4)(apple), buy3Get4thFree)
-    } yield unit
+    //execute Futures in parallel
+    val apple = inventory.getItem("Apple")
+    val bread = inventory.getItem("Bread")
+    val cereal = inventory.getItem("Cereal")
+    val milk = inventory.getItem("Milk")
+    val slicedCheese = inventory.getItem("SlicedCheese")
+    val peanutbutter = inventory.getItem("PeanutButter")
 
     for {
-      apple <- inventory.getItem("Apple")
-      peanutbutter <- inventory.getItem("PeanutButter")
-    } yield inventory.addBundledPrice(List(apple, apple, peanutbutter), buy2Get3rdHalf)
+      a <- apple
+      p <- peanutbutter
+    } yield inventory.addBundledPrice(List(a, a, p), buy2Get3rdHalf)
 
     for {
-      bread <- inventory.getItem("Bread")
-    } yield inventory.addBundledPrice(List.fill(2)(bread), buy1Get1Free)
+      b <- bread
+      p <- peanutbutter
+    } yield inventory.addBundledPrice(List(b, b, p), buy2Get3rdHalf)
 
     for {
-      bread <- inventory.getItem("Bread")
-      peanutbutter <- inventory.getItem("PeanutButter")
-    } yield inventory.addBundledPrice(List(bread, bread, peanutbutter), buy2Get3rdHalf)
+      c <- cereal
+      m <- milk
+    } yield inventory.addBundledPrice(List(c, c, c, m), buy3Get4thFree)
 
     for {
-      cereal <- inventory.getItem("Cereal")
-    } yield inventory.addBundledPrice(List.fill(3)(cereal), buy2Get3rdHalf)
+      m <- milk
+      sc <- slicedCheese
+    } yield inventory.addBundledPrice(List(m, m, sc), buy2Get3rdHalf)
 
-    for {
-      cereal <- inventory.getItem("Cereal")
-      milk <- inventory.getItem("Milk")
-    } yield inventory.addBundledPrice(List(cereal, cereal, cereal, milk), buy3Get4thFree)
+    apple flatMap {a => inventory.addBundledPrice(List.fill(4)(a), buy3Get4thFree)}
 
-    for {
-      milk <- inventory.getItem("Milk")
-    } yield inventory.addBundledPrice(List.fill(2)(milk), buy1Get1Free)
+    bread flatMap {b => inventory.addBundledPrice(List.fill(2)(b), buy1Get1Free)}
 
-    for {
-      milk <- inventory.getItem("Milk")
-      slicedCheese <- inventory.getItem("SlicedCheese")
-    } yield inventory.addBundledPrice(List(milk, milk, slicedCheese), buy2Get3rdHalf)
+    cereal flatMap {c => inventory.addBundledPrice(List.fill(3)(c), buy2Get3rdHalf)}
 
-    for {
-      peanutbutter <- inventory.getItem("PeanutButter")
-    } yield inventory.addBundledPrice(List.fill(2)(peanutbutter), buy1Get2ndHalf)
+    milk flatMap {m => inventory.addBundledPrice(List.fill(2)(m), buy1Get1Free)}
 
-    for {
-      slicedCheese <- inventory.getItem("SlicedCheese")
-    } yield inventory.addBundledPrice(List.fill(2)(slicedCheese), buy1Get2ndHalf)
+    peanutbutter flatMap {p => inventory.addBundledPrice(List.fill(2)(p), buy1Get2ndHalf)}
+
+    slicedCheese flatMap { sc => inventory.addBundledPrice(List.fill(2)(sc), buy1Get2ndHalf)}
   }
 
-  def shoppingCart(inventory: Inventory)(implicit ec: ExecutionContext): Future[List[Item]] =
+  def shoppingCart(inventory: Inventory)(implicit ec: ExecutionContext): Future[List[Item]] = {
+    //execute Futures in parallel
+    val bread = inventory.getItem("Bread")
+    val peanutbutter = inventory.getItem("PeanutButter")
+    val milk = inventory.getItem("Milk")
+    val cereal = inventory.getItem("Cereal")
+
     for {
-      bread <- inventory.getItem("Bread")
-      peanutbutter <- inventory.getItem("PeanutButter")
-      milk <- inventory.getItem("Milk")
-      cereal <- inventory.getItem("Cereal")
-    } yield List(bread, bread, peanutbutter, milk, cereal, cereal, cereal, milk)
+      b <- bread
+      p <- peanutbutter
+      m <- milk
+      c <- cereal
+    } yield List(b, b, p, m, c, c, c, m)
+  }
     
 }
