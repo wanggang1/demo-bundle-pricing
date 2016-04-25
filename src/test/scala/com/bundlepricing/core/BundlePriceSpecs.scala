@@ -18,9 +18,10 @@ class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
   import scala.concurrent.ExecutionContext.Implicits.global
     
   "BundlePrice" must "return optimized price" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-    implicit val inventory = new Inventory
+    implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
+      val itemRepo = new ItemRepo with InMemoryRepository
+      val bundleRepo = new BundleRepo with InMemoryRepository
+    }
     
     Given("initialized Inventory")
     Await.ready(Demo.populateItems(inventory), 200 milliseconds)
@@ -29,7 +30,7 @@ class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
     When("giving a cart of items")
     val cart = List(Bread, Bread, PeanutButter, Milk, Cereal, Cereal, Cereal, Milk)
 
-    Then("prive must be calculated")
+    Then("optimized price must be calculated")
     val bundlePrice = new BundlePrice
     val price = Await.result(bundlePrice.pricing(cart), 1 second) 
     price mustBe 13.73
