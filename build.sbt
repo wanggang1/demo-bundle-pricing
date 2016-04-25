@@ -11,6 +11,7 @@ crossPaths := false
 
 libraryDependencies ++= Seq(
   "org.scala-stm"   %% "scala-stm"   % "0.7"     % Compile,
+  "com.novus"       %% "salat"       % "1.9.9"   % Compile,
   "org.scalatest"   %% "scalatest"   % "2.2.6"   % Test
 )
 
