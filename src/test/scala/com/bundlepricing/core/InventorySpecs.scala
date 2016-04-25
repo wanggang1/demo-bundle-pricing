@@ -15,26 +15,18 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
   import scala.concurrent.duration._
   import scala.concurrent.ExecutionContext.Implicits.global
     
-  "Inventory" must "create Item" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-    
+  "Inventory" must "create Item" in new InventoryTestCxt {
     Given("instance of Inventory")
-    val inventory = new Inventory
     
     When("\"Bread\" for 1.99 is added")
     Await.ready(inventory.addItem("Bread", 1.99), 100 milliseconds)
     
     Then("Bread must be in ItemRepo")
-    itemRepo.get("Bread") mustBe Some(Item("Bread", 1.99))
+    inventory.itemRepo.get("Bread") mustBe Some(Item("Bread", 1.99))
   }
   
-  it must "retrieve Item by name" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-    
+  it must "retrieve Item by name" in new InventoryTestCxt {
     Given("instance of Inventory")
-    val inventory = new Inventory
     
     When("\"Bread\" for 1.99 is added")
     Await.ready(inventory.addItem("Bread", 1.99), 100 milliseconds)
@@ -46,13 +38,9 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     }
   }
   
-  it must "fail if Item does not exist" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-    
+  it must "fail if Item does not exist" in new InventoryTestCxt {
     Given("instance of Inventory")
-    val inventory = new Inventory
-    
+
     When("nothing is added")
     
     Then("getItem must return Failure")
@@ -62,26 +50,18 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     }
   }
 
-  it must "create Bundle" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-
+  it must "create Bundle" in new InventoryTestCxt {
     Given("instance of Inventory")
-    val inventory = new Inventory
 
     When("a bundled price is added")
     Await.ready(inventory.addBundledPrice(List(Milk, Bread), buy1Get2ndHalf), 100 milliseconds)
 
     Then("the bundle must be in BundleRepo")
-    bundleRepo.get("MilkBread") mustBe Some(Bundle(List(Milk, Bread), buy1Get2ndHalf))
+    inventory.bundleRepo.get("MilkBread") mustBe Some(Bundle(List(Milk, Bread), buy1Get2ndHalf))
   }
 
-  it must "retrieve all bundles associated with permutation of bundle key" in {
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-
+  it must "retrieve all bundles associated with permutation of bundle key" in new InventoryTestCxt {
     Given("instance of Inventory")
-    val inventory = new Inventory
 
     When("add bundled prices")
     val expected1 = Bundle(List(Milk, Bread), buy1Get2ndHalf)
@@ -98,6 +78,13 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
       bundles("CerealCerealMilk") mustBe expected2
       bundles("CerealMilkCereal") mustBe expected2
       bundles("MilkCerealCereal") mustBe expected2
+    }
+  }
+  
+  class InventoryTestCxt {
+    val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
+      val itemRepo = new ItemRepo with InMemoryRepository
+      val bundleRepo = new BundleRepo with InMemoryRepository
     }
   }
 

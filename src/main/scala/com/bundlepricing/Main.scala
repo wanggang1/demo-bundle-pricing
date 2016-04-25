@@ -16,9 +16,11 @@ object Main {
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    implicit val itemRepo = new ItemRepo
-    implicit val bundleRepo = new BundleRepo
-    implicit val inventory = new Inventory
+    implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
+      val itemRepo = new ItemRepo with InMemoryRepository
+      val bundleRepo = new BundleRepo with InMemoryRepository
+    }
+    
     val bundlePrice = new BundlePrice
 
     Await.ready(populateItems(inventory), 100 milliseconds)

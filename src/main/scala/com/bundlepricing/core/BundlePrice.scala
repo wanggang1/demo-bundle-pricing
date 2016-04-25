@@ -1,7 +1,6 @@
 package com.bundlepricing.core
 
 import com.bundlepricing.domains._
-import com.bundlepricing.repos.BundleRepo
 import com.bundlepricing.utils.CombinatorialFunction
 
 import scala.BigDecimal
