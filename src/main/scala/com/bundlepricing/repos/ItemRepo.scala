@@ -2,7 +2,7 @@ package com.bundlepricing.repos
 
 import com.bundlepricing.domains.Item
 
-class ItemRepo extends InMemoryRepository {
+class ItemRepo extends RepoMetaData with InMemoryRepository {
   type Id = String
   type Entity = Item
   
