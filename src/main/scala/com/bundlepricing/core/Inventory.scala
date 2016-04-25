@@ -4,8 +4,9 @@ import scala.concurrent.{ExecutionContext, Future, Promise}
 import com.bundlepricing.repos._
 import com.bundlepricing.domains._
 
-class Inventory(implicit itemRepo: ItemRepo, bundleRepo: BundleRepo, ec: ExecutionContext) {
-
+class Inventory(implicit ec: ExecutionContext) {
+  self: ItemRepoComponent with BundleRepoComponent =>
+    
   def addItem(name: String, price: Double): Future[Unit] = Future {
     val item = Item(name, price)
     itemRepo.insert(item)
