@@ -59,8 +59,6 @@ class BundleRepoSpecs extends UnitSpec with TestData {
   }
 
   class BundleRepoTestCxt {
-    import com.bundlepricing.repos.Implicits.Salat._
-    
     val bundleRepoComponent = new BundleRepoComponent {
       val bundleRepo = new BundleRepo with InMemoryRepository
     }

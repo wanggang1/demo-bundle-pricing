@@ -16,7 +16,6 @@ class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
   
   import scala.concurrent.duration._
   import scala.concurrent.ExecutionContext.Implicits.global
-  import com.bundlepricing.repos.Implicits.Salat._
     
   "BundlePrice" must "return optimized price" in {
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {

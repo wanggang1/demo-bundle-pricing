@@ -51,8 +51,6 @@ class ItemMemoryRepoSpecs extends UnitSpec with TestData {
   }
   
   class ItemRepoTestCxt {
-    import com.bundlepricing.repos.Implicits.Salat._
-    
     val itemRepoComponent = new ItemRepoComponent {
       val itemRepo = new ItemRepo with InMemoryRepository
     }

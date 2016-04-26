@@ -82,8 +82,6 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
   }
   
   class InventoryTestCxt {
-    import com.bundlepricing.repos.Implicits.Salat._
-    
     val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
       val itemRepo = new ItemRepo with InMemoryRepository
       val bundleRepo = new BundleRepo with InMemoryRepository
