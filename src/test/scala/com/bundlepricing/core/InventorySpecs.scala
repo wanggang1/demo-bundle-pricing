@@ -22,7 +22,7 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Await.ready(inventory.addItem("Bread", 1.99), 100 milliseconds)
     
     Then("Bread must be in ItemRepo")
-    inventory.itemRepo.get("Bread") mustBe Some(Item("Bread", 1.99))
+    inventory.itemRepo.getByKey("Bread") mustBe Some(Item("Bread", 1.99))
   }
   
   it must "retrieve Item by name" in new InventoryTestCxt {
@@ -57,7 +57,7 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Await.ready(inventory.addBundledPrice(List(Milk, Bread), buy1Get2ndHalf), 100 milliseconds)
 
     Then("the bundle must be in BundleRepo")
-    inventory.bundleRepo.get("MilkBread") mustBe Some(Bundle(List(Milk, Bread), buy1Get2ndHalf))
+    inventory.bundleRepo.getByKey("MilkBread") mustBe Some(Bundle(List(Milk, Bread), buy1Get2ndHalf))
   }
 
   it must "retrieve all bundles associated with permutation of bundle key" in new InventoryTestCxt {

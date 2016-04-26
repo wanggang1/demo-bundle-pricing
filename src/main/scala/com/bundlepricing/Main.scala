@@ -12,7 +12,6 @@ object Main {
    * Demo Bundled Price APIs
    */
   def main (args: Array[String]): Unit = {
-    import Demo._
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -22,6 +21,7 @@ object Main {
     }
     
     val bundlePrice = new BundlePrice
+    import Demo._
 
     Await.ready(populateItems(inventory), 100 milliseconds)
     inventory.showItems()

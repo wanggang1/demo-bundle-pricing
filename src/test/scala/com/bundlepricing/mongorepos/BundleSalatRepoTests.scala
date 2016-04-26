@@ -1,42 +1,48 @@
-package com.bundlepricing.repos
+package com.bundlepricing.mongorepos
 
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.core._
 import com.bundlepricing.domains.Bundle
+import com.bundlepricing.repos.{BundleRepoComponent, SalatRepository}
+
+import com.mongodb.casbah.MongoClient
 
 /**
- * Unit tests for BundleRepo
+ * Unit tests for BundleRepo with SalatRepository
+ * 
+ * This test class is added to EmbeddedMongoSuite.  Or, by itself, it will not be
+ * picked up by running 'sbt test' because class name is not ended with 'Spec(s)???
  */
-class BundleRepoSpecs extends UnitSpec with TestData {
+class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with TestData {
 
-  "BundleRepo" must "retrieve ID from entity" in new BundleRepoTestCxt {
+  "BundleSalatRepo" must "retrieve Key from entity" in new BundleRepoTestCxt {
     Given("a bundle of Bread and Milk")
     val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
     
-    Then("the ID must be MilkBread")
-    bundleRepoComponent.bundleRepo.id(bundle) mustBe "MilkBread"
+    Then("the Key must be MilkBread")
+    bundleRepoComponent.bundleRepo.key(bundle) mustBe "MilkBread"
   }
-  
-  it must "insert a Bundle and retrieve it by ID" in new BundleRepoTestCxt {
+
+  it must "insert a Bundle and retrieve it by Key" in new BundleRepoTestCxt {
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
     val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
     bundleRepoComponent.bundleRepo.insert(bundle)
     
-    Then("bundle must be retrieved using ID 'MilkBread'")
-    bundleRepoComponent.bundleRepo.get("MilkBread") mustBe Some(bundle)
+    Then("bundle must be retrieved using Key 'MilkBread'")
+    bundleRepoComponent.bundleRepo.getByKey("MilkBread") mustBe Some(bundle)
   }
   
-  it must "retrieve None if ID is not found in repo" in new BundleRepoTestCxt {
+  it must "retrieve None if Key is not found in repo" in new BundleRepoTestCxt {
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
     val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
     bundleRepoComponent.bundleRepo.insert(bundle)
     
-    Then("None must be retrieved using ID 'AppleApple'")
-    bundleRepoComponent.bundleRepo.get("AppleApple") mustBe None
+    Then("None must be retrieved using Key 'AppleApple'")
+    bundleRepoComponent.bundleRepo.getByKey("AppleApple") mustBe None
   }
   
   it must "retrieve all Bundles in repo" in new BundleRepoTestCxt {
@@ -59,8 +65,12 @@ class BundleRepoSpecs extends UnitSpec with TestData {
   }
 
   class BundleRepoTestCxt {
+    import java.util.UUID
+    
     val bundleRepoComponent = new BundleRepoComponent {
-      val bundleRepo = new BundleRepo with InMemoryRepository
+      import com.bundlepricing.repos.Implicits.Salat.salatContext
+      implicit val mc = mongoClient //use test mongoClient instead the one from application
+      val bundleRepo = new BundleMongoRepo(dbName = "test-db", collectionName = UUID.randomUUID.toString) with SalatRepository
     }
   }
     
