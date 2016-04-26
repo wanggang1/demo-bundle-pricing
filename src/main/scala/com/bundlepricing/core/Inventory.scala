@@ -18,7 +18,7 @@ class Inventory(implicit ec: ExecutionContext) {
   def getItem(name: String): Future[Item] = {
     val p = Promise[Item]()
     Future {
-      itemRepo.get(name).fold(p.failure(new Exception("Item Not Found"))){
+      itemRepo.getByKey(name).fold(p.failure(new Exception("Item Not Found"))){
         item => p.success(item)
       }
     }

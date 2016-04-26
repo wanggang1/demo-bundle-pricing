@@ -12,16 +12,19 @@ object Main {
    * Demo Bundled Price APIs
    */
   def main (args: Array[String]): Unit = {
-    import Demo._
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
 
+    //implicits for MongoDB Repositories
+    import com.bundlepricing.repos.Implicits.Salat._
+    
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
       val itemRepo = new ItemRepo with InMemoryRepository
       val bundleRepo = new BundleRepo with InMemoryRepository
     }
     
     val bundlePrice = new BundlePrice
+    import Demo._
 
     Await.ready(populateItems(inventory), 100 milliseconds)
     inventory.showItems()

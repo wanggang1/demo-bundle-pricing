@@ -5,33 +5,33 @@ import com.bundlepricing.{TestData, UnitSpec}
 /**
  * Unit tests for ItemRepo
  */
-class ItemRepoSpecs extends UnitSpec with TestData {
+class ItemMemoryRepoSpecs extends UnitSpec with TestData {
 
-  "ItemRepo" must "retrieve ID from entity" in new ItemRepoTestCxt {
+  "ItemRepo" must "retrieve Key from entity" in new ItemRepoTestCxt {
     Given("Item(\"Bread\", 1.99)")
     
-    Then("the ID must be Bread")
-    itemRepoComponent.itemRepo.id(Bread) mustBe "Bread"
+    Then("the Key must be Bread")
+    itemRepoComponent.itemRepo.key(Bread) mustBe "Bread"
   }
   
-  it must "insert an Item and retrieve it by ID" in new ItemRepoTestCxt {
+  it must "insert an Item and retrieve it by Key" in new ItemRepoTestCxt {
     Given("instance of ItemRepo")
     
     When("insert Item(\"Bread\", 1.99)")
     itemRepoComponent.itemRepo.insert(Bread)
     
-    Then("Bread must be retrieved using ID 'Bread'")
-    itemRepoComponent.itemRepo.get("Bread") mustBe Some(Bread)
+    Then("Bread must be retrieved using Key 'Bread'")
+    itemRepoComponent.itemRepo.getByKey("Bread") mustBe Some(Bread)
   }
   
-  it must "retrieve None if ID is not found in repo" in new ItemRepoTestCxt {
+  it must "retrieve None if Key is not found in repo" in new ItemRepoTestCxt {
     Given("instance of ItemRepo")
     
     When("insert Item(\"Apple\", 1.00)")
     itemRepoComponent.itemRepo.insert(Apple)
     
-    Then("None must be retrieved using ID 'Bread'")
-    itemRepoComponent.itemRepo.get("Bread") mustBe None
+    Then("None must be retrieved using Key 'Bread'")
+    itemRepoComponent.itemRepo.getByKey("Bread") mustBe None
   }
   
   it must "retrieve all Items in repo" in new ItemRepoTestCxt {
@@ -51,6 +51,8 @@ class ItemRepoSpecs extends UnitSpec with TestData {
   }
   
   class ItemRepoTestCxt {
+    import com.bundlepricing.repos.Implicits.Salat._
+    
     val itemRepoComponent = new ItemRepoComponent {
       val itemRepo = new ItemRepo with InMemoryRepository
     }

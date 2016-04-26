@@ -28,9 +28,12 @@ trait SalatRepository extends Repository {
     
     salatDao.findOne(idToDBObject(id))
   }
+  
+  def getByKey(key: Key): Option[Entity] =
+    salatDao.findOne(DBObject(keyField -> key))
 
-  def getAll: Map[Id, Entity] =
-    salatDao.find(MongoDBObject.empty).toList.map(e => id(e) -> e)(scala.collection.breakOut)
+  def getAll: Map[Key, Entity] =
+    salatDao.find(MongoDBObject.empty).toList.map(e => key(e) -> e)(scala.collection.breakOut)
 
   def insert(entity: Entity): Unit =
     salatDao.insert(entity)

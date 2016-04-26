@@ -4,6 +4,8 @@ import com.bundlepricing.core.Pricing
 
 object Bundle {
   
+  def apply(items: List[Item], applyPolicy: Pricing) = new Bundle(items, bundleKey(items), applyPolicy(items))
+  
   def bundleKey(items: List[Item]): String = items.map(_.name).mkString
   
   /*
@@ -14,9 +16,4 @@ object Bundle {
   
 }
 
-case class Bundle(items: List[Item], applyPolicy: Pricing) {
-  import Bundle._
-
-  val key = bundleKey(items)
-  val price = applyPolicy(items)
-}
+case class Bundle(items: List[Item], key: String, price: Double)
