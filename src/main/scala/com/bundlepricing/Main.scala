@@ -15,9 +15,6 @@ object Main {
     import scala.concurrent.duration._
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    //implicits for MongoDB Repositories
-    import com.bundlepricing.repos.Implicits.Salat._
-    
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
       val itemRepo = new ItemRepo with InMemoryRepository
       val bundleRepo = new BundleRepo with InMemoryRepository

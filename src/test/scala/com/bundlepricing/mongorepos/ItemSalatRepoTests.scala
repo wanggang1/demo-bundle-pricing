@@ -57,11 +57,11 @@ class ItemSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with Tes
   
   class ItemRepoTestCxt {
     import java.util.UUID
-    import com.bundlepricing.repos.Implicits.Salat.salatContext
-    implicit val mc = mongoClient
-    
+
     val itemRepoComponent = new ItemRepoComponent {
-      val itemRepo = new ItemRepo(dbName = "test-db", collectionName = UUID.randomUUID.toString) with SalatRepository
+      import com.bundlepricing.repos.Implicits.Salat.salatContext
+      implicit val mc = mongoClient //use test mongoClient instead the one from application
+      val itemRepo = new ItemMongoRepo(dbName = "test-db", collectionName = UUID.randomUUID.toString) with SalatRepository
     }
   }
   

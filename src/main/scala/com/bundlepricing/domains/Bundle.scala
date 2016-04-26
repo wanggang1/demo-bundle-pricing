@@ -16,4 +16,7 @@ object Bundle {
   
 }
 
+/**
+ * make this a simple case class, so it's easy to use Salat to serialize
+ */
 case class Bundle(items: List[Item], key: String, price: Double)

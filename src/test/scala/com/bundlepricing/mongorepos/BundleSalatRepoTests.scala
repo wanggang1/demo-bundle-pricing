@@ -66,11 +66,11 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
 
   class BundleRepoTestCxt {
     import java.util.UUID
-    import com.bundlepricing.repos.Implicits.Salat.salatContext
-    implicit val mc = mongoClient
     
     val bundleRepoComponent = new BundleRepoComponent {
-      val bundleRepo = new BundleRepo(dbName = "test-db", collectionName = UUID.randomUUID.toString) with SalatRepository
+      import com.bundlepricing.repos.Implicits.Salat.salatContext
+      implicit val mc = mongoClient //use test mongoClient instead the one from application
+      val bundleRepo = new BundleMongoRepo(dbName = "test-db", collectionName = UUID.randomUUID.toString) with SalatRepository
     }
   }
     

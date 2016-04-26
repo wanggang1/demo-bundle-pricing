@@ -8,15 +8,7 @@ import com.novus.salat.{ Context, grater }
 import scala.reflect.runtime.universe.typeOf
 
 trait SalatRepository extends Repository {
-  self : RepoMetaData =>
-    
-  protected def mongoClient: MongoClient
-  protected def dbName: String
-  protected def collectionName: String
-  
-  implicit protected def context: Context
-  implicit protected def idManifest: Manifest[Id]
-  implicit protected def entityManifest: Manifest[Entity]
+  self : SalatRepoMataData =>
 
   lazy protected val salatDao = new SalatDAO[Entity, Id](mongoClient(dbName)(collectionName)) {}
 
@@ -43,4 +35,16 @@ trait SalatRepository extends Repository {
   def idToDBObject(id: Id): DBObject =
     if (typeOf[Id] <:< typeOf[CaseClass]) DBObject("_id" -> grater[Id].asDBObject(id)) else DBObject("_id" -> id)
 
+}
+
+trait SalatRepoMataData extends RepoMetaData {
+  type Id <: AnyRef //Entity's unique identifier
+  
+  def dbName: String
+  def collectionName: String
+
+  implicit def mongoClient: MongoClient
+  implicit def context: Context
+  implicit def idManifest: Manifest[Id]
+  implicit def entityManifest: Manifest[Entity]
 }
