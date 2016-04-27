@@ -7,7 +7,7 @@ import com.bundlepricing.domains.Bundle
 /**
  * Unit tests for BundleRepo
  */
-class BundleRepoSpecs extends UnitSpec with TestData {
+class BundleMemoryRepoSpecs extends UnitSpec with TestData {
 
   "BundleRepo" must "retrieve Key from entity" in new BundleRepoTestCxt {
     Given("a bundle of Bread and Milk")

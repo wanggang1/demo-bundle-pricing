@@ -22,7 +22,12 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Await.ready(inventory.addItem("Bread", 1.99), 100 milliseconds)
     
     Then("Bread must be in ItemRepo")
-    inventory.itemRepo.getByKey("Bread") mustBe Some(Item("Bread", 1.99))
+    inventory.itemRepo.getByKey("Bread") match {
+      case Some(Item(_, name, price)) =>
+        name mustBe "Bread"
+        price.value mustBe 1.99
+      case None => fail("create Item failed")
+    }
   }
   
   it must "retrieve Item by name" in new InventoryTestCxt {
@@ -34,7 +39,8 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Then("getItem must return Bread")
     val resultFuture = inventory.getItem("Bread")
     whenReady(resultFuture) { item =>
-      item mustBe Item("Bread", 1.99)
+      item.name mustBe "Bread"
+      item.price.value mustBe 1.99
     }
   }
   
@@ -54,10 +60,17 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Given("instance of Inventory")
 
     When("a bundled price is added")
+    val expected = Bundle(List(Milk, Bread), buy1Get2ndHalf)
     Await.ready(inventory.addBundledPrice(List(Milk, Bread), buy1Get2ndHalf), 100 milliseconds)
 
     Then("the bundle must be in BundleRepo")
-    inventory.bundleRepo.getByKey("MilkBread") mustBe Some(Bundle(List(Milk, Bread), buy1Get2ndHalf))
+    inventory.bundleRepo.getByKey("MilkBread") match {
+      case Some(bundle) => 
+        bundle.items mustBe expected.items
+        bundle.key mustBe expected.key
+        bundle.price mustBe expected.price
+      case None => fail("create Bundle failed")
+    }
   }
 
   it must "retrieve all bundles associated with permutation of bundle key" in new InventoryTestCxt {
@@ -73,11 +86,20 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     val resultFuture = inventory.getBundles
     whenReady(resultFuture) { bundles =>
       bundles.size mustBe 5
-      bundles("MilkBread") mustBe expected1
-      bundles("BreadMilk") mustBe expected1
-      bundles("CerealCerealMilk") mustBe expected2
-      bundles("CerealMilkCereal") mustBe expected2
-      bundles("MilkCerealCereal") mustBe expected2
+      val b2_1 = bundles("MilkBread")
+      val b2_2 = bundles("BreadMilk")
+      b2_1.items mustBe expected1.items
+      b2_1.key mustBe expected1.key
+      b2_1.price mustBe expected1.price
+      b2_2 mustBe b2_1
+      val b3_1 = bundles("CerealCerealMilk")
+      val b3_2 = bundles("CerealMilkCereal")
+      val b3_3 = bundles("MilkCerealCereal")
+      b3_1.items mustBe expected2.items
+      b3_1.key mustBe expected2.key
+      b3_1.price mustBe expected2.price
+      b3_2 mustBe b3_1
+      b3_3 mustBe b3_1
     }
   }
   
