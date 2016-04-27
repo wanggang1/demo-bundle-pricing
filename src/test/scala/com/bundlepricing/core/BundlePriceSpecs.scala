@@ -12,7 +12,7 @@ import scala.concurrent.Await
  */
 class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
 
-  import com.bundlepricing.Demo
+  import com.bundlepricing.SampleData
   
   import scala.concurrent.duration._
   import scala.concurrent.ExecutionContext.Implicits.global
@@ -24,8 +24,8 @@ class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
     }
     
     Given("initialized Inventory")
-    Await.ready(Demo.populateItems(inventory), 200 milliseconds)
-    Await.ready(Demo.populateBundles(inventory), 200 milliseconds)
+    Await.ready(SampleData.populateItems(inventory), 200 milliseconds)
+    Await.ready(SampleData.populateBundles(inventory), 200 milliseconds)
   
     When("giving a cart of items")
     val cart = List(Bread, Bread, PeanutButter, Milk, Cereal, Cereal, Cereal, Milk)

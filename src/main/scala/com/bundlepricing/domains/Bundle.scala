@@ -1,10 +1,15 @@
 package com.bundlepricing.domains
 
+import com.novus.salat.annotations.Key
+import org.bson.types.ObjectId
+import squants.market.{ Money, USD }
+
 import com.bundlepricing.core.Pricing
 
 object Bundle {
-  
-  def apply(items: List[Item], applyPolicy: Pricing) = new Bundle(items, bundleKey(items), applyPolicy(items))
+
+  def apply(items: List[Item], applyPolicy: Pricing) =
+    new Bundle(new ObjectId, items, bundleKey(items), USD(applyPolicy(items)))
   
   def bundleKey(items: List[Item]): String = items.map(_.name).mkString
   
@@ -13,10 +18,16 @@ object Bundle {
    */
   def keyPermutations(items: List[Item]): List[String] =
     items.map(_.name).permutations.map(_.mkString).toList
-  
+        
+  val collectionName = "Bundles"
+
 }
 
 /**
- * make this a simple case class, so it's easy to use Salat to serialize
+ * will create _id in app have issue when app running on multiple instances of JVM???
  */
-case class Bundle(items: List[Item], key: String, price: Double)
+case class Bundle(
+    @Key("_id") id: ObjectId,
+    items: List[Item], 
+    key: String, 
+    price: Money)

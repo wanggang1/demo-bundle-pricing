@@ -23,7 +23,7 @@ object BundlePrice {
   def showPurchases(bundleCombos: List[List[Bundle]]) = {
     println(s"possible bundled prices: ${bundleCombos.size}")
     bundleCombos.map { purchase: List[Bundle] =>
-      val cost = purchase.foldLeft(0.0)(_ + _.price)
+      val cost = purchase.foldLeft(0.0)(_ + _.price.value)
       println(s"$purchase -> $$$cost")
     }
     println("")
@@ -63,7 +63,7 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   }
   
   def optimizedPrice(purchases: List[List[Bundle]]): Double = {
-    val costs = purchases.map { _.foldLeft(0.0)(_ + _.price) }
+    val costs = purchases.map { _.foldLeft(0.0)(_ + _.price.value) }
     BigDecimal(costs.min).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
   }
   
