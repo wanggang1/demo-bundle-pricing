@@ -2,9 +2,11 @@ package com.bundlepricing.core
 
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.domains._
+import com.bundlepricing.legacy.Inventory;
 import com.bundlepricing.repos._
 
 import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Await
 
 /**
@@ -13,7 +15,7 @@ import scala.concurrent.Await
 class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
 
   import scala.concurrent.duration._
-  import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
     
   "Inventory" must "create Item" in new InventoryTestCxt {
     Given("instance of Inventory")

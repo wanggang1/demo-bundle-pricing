@@ -1,4 +1,4 @@
-package com.bundlepricing.core
+package com.bundlepricing.legacy
 
 import com.bundlepricing.domains._
 import com.bundlepricing.utils.CombinatorialFunction
@@ -32,8 +32,8 @@ object BundlePrice {
 
 class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   import BundlePrice._
-  import CombinatorialFunction._
-  import Bundle._
+import CombinatorialFunction._
+import Bundle._
   
   def pricing(purchasedItems: List[Item]): Future[Double] = {
     val bundlesFuture = inventory.getBundles

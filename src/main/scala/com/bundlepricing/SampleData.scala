@@ -1,7 +1,7 @@
 package com.bundlepricing
 
-import com.bundlepricing.domains.Item
-import com.bundlepricing.core._
+import com.bundlepricing.domains._
+import com.bundlepricing.legacy.Inventory
 
 import scala.concurrent.{Await, ExecutionContext, Future}
 

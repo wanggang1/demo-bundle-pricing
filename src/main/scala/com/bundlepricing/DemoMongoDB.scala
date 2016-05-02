@@ -1,6 +1,6 @@
 package com.bundlepricing
 
-import com.bundlepricing.core._
+import com.bundlepricing.legacy._
 import com.bundlepricing.domains._
 import com.bundlepricing.repos._
 

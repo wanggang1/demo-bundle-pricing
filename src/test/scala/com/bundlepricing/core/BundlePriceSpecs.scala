@@ -2,9 +2,12 @@ package com.bundlepricing.core
 
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.domains._
+import com.bundlepricing.legacy.BundlePrice;
+import com.bundlepricing.legacy.Inventory;
 import com.bundlepricing.repos._
 
 import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Await
 
 /**
@@ -12,10 +15,12 @@ import scala.concurrent.Await
  */
 class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
 
+
   import com.bundlepricing.SampleData
   
+
   import scala.concurrent.duration._
-  import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
     
   "BundlePrice" must "return optimized price" in {
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {

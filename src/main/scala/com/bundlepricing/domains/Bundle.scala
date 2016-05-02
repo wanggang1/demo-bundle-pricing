@@ -4,8 +4,6 @@ import com.novus.salat.annotations.Key
 import org.bson.types.ObjectId
 import squants.market.{ Money, USD }
 
-import com.bundlepricing.core.Pricing
-
 object Bundle {
 
   def apply(items: List[Item], applyPolicy: Pricing) =

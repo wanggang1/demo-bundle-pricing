@@ -21,6 +21,7 @@ libraryDependencies ++= {
 	  "com.typesafe.akka"           %% "akka-slf4j"                 % akkaVer   % Runtime,
 	  "org.slf4j"                    % "log4j-over-slf4j"           % "1.7.13"  % Runtime,
 	  "org.scalatest"               %% "scalatest"                  % "2.2.6"   % Test,
+	  "com.typesafe.akka"           %% "akka-testkit"               % akkaVer   % Test,
 	  "de.flapdoodle.embed"          % "de.flapdoodle.embed.mongo"  % "1.50.0"  % Test
 	)
 }

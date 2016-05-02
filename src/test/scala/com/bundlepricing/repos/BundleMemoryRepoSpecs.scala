@@ -1,8 +1,7 @@
 package com.bundlepricing.repos
 
 import com.bundlepricing.{TestData, UnitSpec}
-import com.bundlepricing.core._
-import com.bundlepricing.domains.Bundle
+import com.bundlepricing.domains._
 
 /**
  * Unit tests for BundleRepo
