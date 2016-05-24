@@ -18,6 +18,9 @@ trait ItemRepoComponent {
     def key(entity: Item): Key = entity.name
   }
   
+  /**
+   * real implementation can be mixin at creation time
+   */
   abstract class ItemMongoRepo(val dbName: String = "", val collectionName: String = "")
                          (implicit val context: Context, val mongoClient: MongoClient)
                   extends SalatRepoMataData with ItemRepo {

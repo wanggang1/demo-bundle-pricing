@@ -7,7 +7,7 @@ import scala.concurrent.duration._
 
 import com.bundlepricing.actors._
 
-object DemoActorMongoDB {
+object DemoActorSystem {
 
   /**
    * Demo Bundled Price ActorSystem

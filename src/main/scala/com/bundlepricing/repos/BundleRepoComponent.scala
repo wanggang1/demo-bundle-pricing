@@ -18,6 +18,9 @@ trait BundleRepoComponent {
     def key(entity: Bundle): Key = entity.key
   }
   
+  /**
+   * real implementation can be mixin at creation time
+   */
   abstract class BundleMongoRepo(val dbName: String = "", val collectionName: String = "")
                                 (implicit val context: Context, val mongoClient: MongoClient)
                  extends SalatRepoMataData with BundleRepo {

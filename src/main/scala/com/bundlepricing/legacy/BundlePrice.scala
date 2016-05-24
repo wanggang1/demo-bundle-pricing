@@ -32,16 +32,16 @@ object BundlePrice {
 
 class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   import BundlePrice._
-import CombinatorialFunction._
-import Bundle._
+  import CombinatorialFunction._
+  import Bundle._
   
   def pricing(purchasedItems: List[Item]): Future[Double] = {
     val bundlesFuture = inventory.getBundles
     for {
       possibleBundles <- applicableBundles(purchasedItems, bundlesFuture)
-      ignored1 = showBundles(possibleBundles) //for demo purpose only
+      _ = showBundles(possibleBundles) //for demo purpose only
       purchases = convertToBundles(purchasedItems, possibleBundles)
-      ignored2 = showPurchases(purchases) //for demo purpose only
+      _ = showPurchases(purchases) //for demo purpose only
     } yield optimizedPrice(purchases)
   }
 

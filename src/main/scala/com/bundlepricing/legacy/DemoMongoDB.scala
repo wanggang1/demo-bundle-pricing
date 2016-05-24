@@ -1,10 +1,12 @@
-package com.bundlepricing
+package com.bundlepricing.legacy
 
-import com.bundlepricing.legacy._
 import com.bundlepricing.domains._
 import com.bundlepricing.repos._
-
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Await
+import com.bundlepricing.Settings
+import com.bundlepricing.repos.Implicits.Salat
+import scala.concurrent.ExecutionContext.Implicits
+import scala.concurrent.duration.DurationInt
 
 object DemoMongoDB {
 
@@ -18,6 +20,7 @@ object DemoMongoDB {
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
       import com.bundlepricing.repos.Implicits.Salat._
       
+      //mixin the implementation with SalatRepository
       val itemRepo = new ItemMongoRepo(Settings.dbName, Item.collectionName) with SalatRepository
       val bundleRepo = new BundleMongoRepo(Settings.dbName, Bundle.collectionName) with SalatRepository
     }
