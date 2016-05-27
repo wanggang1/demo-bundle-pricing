@@ -2,6 +2,9 @@ package com.bundlepricing.repos
 
 import scala.concurrent.stm.TMap
 
+/**
+ * to be mixin at repo instantiation time
+ */
 trait InMemoryRepository extends Repository {
   self : RepoMetaData =>
  

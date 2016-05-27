@@ -1,10 +1,9 @@
-package org.bundlepricing.actors.collectors
+package com.bundlepricing.actors.collectors
 
 import akka.actor._
 
 import scala.concurrent.duration._
 import scala.concurrent.{ Future, Promise }
-
 
 object ResponseCollector {
   import akka.util.Timeout
@@ -13,18 +12,12 @@ object ResponseCollector {
               (implicit timeout: Timeout): Props =
       Props(new ResponseCollector(timeout.duration, tracker, result, matcher))
 
-  def apply[T](tracker: ResponseTracker[T], matcher: PartialFunction[Any, T])
-              (implicit timeout: Timeout, factory: ActorRefFactory): (Future[Result[T]], ActorRef) = {
+  def apply[T](tracker: ResponseTracker[T], matcher: PartialFunction[Any, T], factory: ActorRefFactory)
+              (implicit timeout: Timeout): (Future[Result[T]], ActorRef) = {
     val result = Promise[Result[T]]()
     val ref = factory.actorOf(props(tracker, result, matcher))
     (result.future, ref)
   }
-  
-  val sampleMatcher: PartialFunction[Any, String] = {
-    case s: String => s
-    case i: Int => i.toString
-  }
-  
 }
 
 class ResponseCollector[T](
@@ -56,7 +49,7 @@ class ResponseCollector[T](
   
     case ReceiveTimeout =>
       log.warning("Response collection timed out")
-      result.success(Result(responses, CollectorTimeout))
+      result.success(Result(responses, Partial))
       context.stop(self)
   
     case m =>

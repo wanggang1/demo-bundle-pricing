@@ -1,4 +1,4 @@
-package org.bundlepricing.actors.collectors
+package com.bundlepricing.actors.collectors
 
 /**
  * tracking responses

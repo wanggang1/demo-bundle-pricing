@@ -2,27 +2,26 @@ package com.bundlepricing.actors
 
 import akka.actor._
 
-import com.bundlepricing.Settings
 import com.bundlepricing.domains.Item
-import com.bundlepricing.repos.{ItemRepoComponent, SalatRepository}
+import com.bundlepricing.repos.ItemMongoRepo
 
 object ItemReaderActor {
-  def props = Props(new ItemReaderActor with ItemRepoComponent {
-    import com.bundlepricing.repos.Implicits.Salat._
-    
-    val itemRepo = new ItemMongoRepo(Settings.dbName, Item.collectionName) with SalatRepository
-  })
+  def props(implicit itemRepo: ItemMongoRepo) = Props(new ItemReaderActor(itemRepo))
 
   case class FetchItem(key: String)
+  sealed trait ItemResult
+  case class ItemFound(item: Item) extends ItemResult
+  case class ItemNotFound(key: String) extends ItemResult
 }
 
-class ItemReaderActor extends Actor with ActorLogging {
-  self: ItemRepoComponent =>
-    
+class ItemReaderActor(itemRepo: ItemMongoRepo) extends Actor with ActorLogging {
   import ItemReaderActor._
   
   def receive = {
-    case FetchItem(key: String) => itemRepo.getByKey(key).foreach(item => sender ! item)
+    case FetchItem(key: String) => 
+      itemRepo.getByKey(key) match {
+        case Some(item) => sender ! ItemFound(item)
+        case None => sender ! ItemNotFound(key)
+      }
   }
-  
 }

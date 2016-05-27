@@ -2,7 +2,7 @@ package com.bundlepricing.mongorepos
 
 import com.mongodb.casbah.MongoClient
 import com.bundlepricing.{TestData, UnitSpec}
-import com.bundlepricing.repos.{ItemRepoComponent, SalatRepository}
+import com.bundlepricing.repos.{ItemRepoComponent, ItemMongoRepo, SalatRepository}
 
 /**
  * Unit tests for ItemRepo with SalatRepository
