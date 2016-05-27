@@ -1,9 +1,7 @@
-package com.bundlepricing
+package com.bundlepricing.legacy
 
-import com.bundlepricing.domains.Item
-import com.bundlepricing.core._
-
-import scala.concurrent.{Await, ExecutionContext, Future}
+import com.bundlepricing.domains._
+import scala.concurrent.{ExecutionContext, Future}
 
 object SampleData {
     

@@ -1,10 +1,10 @@
-package com.bundlepricing
+package com.bundlepricing.legacy
 
-import com.bundlepricing.core._
 import com.bundlepricing.domains.Item
 import com.bundlepricing.repos._
-
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits
+import scala.concurrent.duration.DurationInt
 
 object DemoInMemory {
 
@@ -16,6 +16,7 @@ object DemoInMemory {
     import scala.concurrent.ExecutionContext.Implicits.global
 
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
+      //mixin the implementation with InMemoryRepository
       val itemRepo = new ItemRepo with InMemoryRepository
       val bundleRepo = new BundleRepo with InMemoryRepository
     }

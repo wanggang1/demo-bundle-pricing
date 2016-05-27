@@ -1,4 +1,4 @@
-package com.bundlepricing.core
+package com.bundlepricing.legacy
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
 import com.bundlepricing.repos._

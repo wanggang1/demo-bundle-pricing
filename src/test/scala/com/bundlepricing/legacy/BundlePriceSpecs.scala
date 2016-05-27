@@ -1,10 +1,11 @@
-package com.bundlepricing.core
+package com.bundlepricing.legacy
 
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.domains._
 import com.bundlepricing.repos._
 
 import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Await
 
 /**
@@ -12,8 +13,6 @@ import scala.concurrent.Await
  */
 class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
 
-  import com.bundlepricing.SampleData
-  
   import scala.concurrent.duration._
   import scala.concurrent.ExecutionContext.Implicits.global
     

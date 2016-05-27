@@ -1,10 +1,11 @@
-package com.bundlepricing.core
+package com.bundlepricing.legacy
 
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.domains._
 import com.bundlepricing.repos._
 
 import org.scalatest.concurrent.ScalaFutures
+
 import scala.concurrent.Await
 
 /**

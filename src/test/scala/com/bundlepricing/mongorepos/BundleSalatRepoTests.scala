@@ -1,9 +1,8 @@
 package com.bundlepricing.mongorepos
 
 import com.bundlepricing.{TestData, UnitSpec}
-import com.bundlepricing.core._
-import com.bundlepricing.domains.Bundle
-import com.bundlepricing.repos.{BundleRepoComponent, SalatRepository}
+import com.bundlepricing.domains._
+import com.bundlepricing.repos.{BundleRepoComponent, BundleMongoRepo, SalatRepository}
 
 import com.mongodb.casbah.MongoClient
 

@@ -7,6 +7,11 @@ import com.novus.salat.{ Context, grater }
 
 import scala.reflect.runtime.universe.typeOf
 
+/**
+ * Mongo implementation of Repository with Salat library
+ * 
+ * to be mixin at repo instantiation time
+ */
 trait SalatRepository extends Repository {
   self : SalatRepoMataData =>
 

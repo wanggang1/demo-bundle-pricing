@@ -1,4 +1,4 @@
-package com.bundlepricing.core
+package com.bundlepricing.legacy
 
 import com.bundlepricing.domains._
 import com.bundlepricing.utils.CombinatorialFunction
@@ -39,9 +39,9 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
     val bundlesFuture = inventory.getBundles
     for {
       possibleBundles <- applicableBundles(purchasedItems, bundlesFuture)
-      ignored1 = showBundles(possibleBundles) //for demo purpose only
+      _ = showBundles(possibleBundles) //for demo purpose only
       purchases = convertToBundles(purchasedItems, possibleBundles)
-      ignored2 = showPurchases(purchases) //for demo purpose only
+      _ = showPurchases(purchases) //for demo purpose only
     } yield optimizedPrice(purchases)
   }
 
