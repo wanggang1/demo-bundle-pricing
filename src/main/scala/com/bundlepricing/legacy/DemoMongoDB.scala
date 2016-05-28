@@ -19,10 +19,17 @@ object DemoMongoDB {
 
     implicit val inventory = new Inventory with ItemRepoComponent with BundleRepoComponent {
       import com.bundlepricing.repos.Implicits.Salat._
+      import com.mongodb.casbah.Imports._
       
       //mixin the implementation with SalatRepository
-      val itemRepo = new ItemMongoRepo(Settings.dbName, Item.collectionName) with SalatRepository
-      val bundleRepo = new BundleMongoRepo(Settings.dbName, Bundle.collectionName) with SalatRepository
+      val itemRepo = new ItemMongoRepo(Settings.dbName, Item.collectionName) with SalatRepository {
+        //Ensure item name are unique
+        salatDao.collection.ensureIndex(keys = Map("name" -> 1), name = "item_name_index", unique = true)
+      }
+      val bundleRepo = new BundleMongoRepo(Settings.dbName, Bundle.collectionName) with SalatRepository {
+        //Ensure bundle key are unique
+        salatDao.collection.ensureIndex(keys = Map("key" -> 1), name = "bundle_key_index", unique = true)
+      }
     }
     
     val bundlePrice = new BundlePrice

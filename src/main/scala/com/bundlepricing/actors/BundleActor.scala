@@ -10,7 +10,7 @@ import com.bundlepricing.repos._
 import scala.util.{Failure, Success, Try}
 
 object BundleActor {
-  
+
   def props(implicit bundleRepo: BundleMongoRepo) = Props(new BundleActor(bundleRepo))
   
   val name = "bundle-actor"
@@ -20,7 +20,17 @@ object BundleActor {
   case object AddBundleSuccess
   case object AddBundleFailed
   case class AllBundles(all: Map[String, Bundle])
-  
+
+  def allKeyPermutations(bundles: Map[String, Bundle]): Map[String, Bundle] = {
+    val pairs = 
+      for {
+        bundle <- bundles.values
+        keyPermutation <- Bundle.keyPermutations(bundle.items)
+      } yield (keyPermutation -> bundle)
+        
+    pairs.toMap
+  }
+ 
   /**
    * For demo purpose only
    */
@@ -48,11 +58,7 @@ class BundleActor(bundleRepo: BundleMongoRepo) extends Actor with ActorLogging  
   
   def receive = {
     case GetAllBundles =>
-      val pairs = for {
-          bundle <- bundles.values
-          keyPermutation <- Bundle.keyPermutations(bundle.items)
-        } yield (keyPermutation -> bundle)
-      sender ! AllBundles(pairs.toMap)
+      sender ! AllBundles( allKeyPermutations(bundles) )
     case AddBundle(bundle) =>
       Try( bundleRepo.insert(bundle) ) match {
         case Success(_) => 

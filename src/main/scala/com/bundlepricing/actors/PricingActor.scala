@@ -80,7 +80,7 @@ class PricingActor extends Actor with ActorLogging  {
     case Pricing(items, bundles, requester) =>
       log.debug("")
       val price = pricing(items, bundles)
-      context.parent ! OptimizedPrice(price, requester)
+      sender ! OptimizedPrice(price, requester)
       context stop self
   }
 
