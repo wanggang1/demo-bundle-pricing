@@ -37,7 +37,7 @@ object DemoActorSystem extends App with StrictLogging {
   
   val itemWriter = system.actorOf(ItemWriterActor.props(bundleKeeper), ItemWriterActor.name)
   
-  val itemReaderRouter = system.actorOf(ItemReaderRouter.props, ItemReaderRouter.name)
+  val itemReaderRouter = system.actorOf(ItemReaderRouter.props(itemRepo), ItemReaderRouter.name)
   
   val shoppingcartActor = system.actorOf(ShoppingcartActor.props(bundleKeeper, itemReaderRouter), ShoppingcartActor.name)
   

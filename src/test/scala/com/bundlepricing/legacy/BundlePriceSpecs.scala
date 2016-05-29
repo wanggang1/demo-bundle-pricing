@@ -27,7 +27,7 @@ class BundlePriceSpecs extends UnitSpec with TestData with ScalaFutures {
     Await.ready(SampleData.populateBundles(inventory), 200 milliseconds)
   
     When("giving a cart of items")
-    val cart = List(Bread, Bread, PeanutButter, Milk, Cereal, Cereal, Cereal, Milk)
+    val cart = List(bread, bread, peanutbutter, milk, cereal, cereal, cereal, milk)
 
     Then("optimized price must be calculated")
     val bundlePrice = new BundlePrice
