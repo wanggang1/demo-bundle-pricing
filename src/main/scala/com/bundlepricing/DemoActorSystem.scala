@@ -20,8 +20,8 @@ object DemoActorSystem extends App with StrictLogging {
   import com.bundlepricing.repos.Implicits.Salat._
   import com.mongodb.casbah.Imports._
   
+  val system = ActorSystem("store-akka-stream", ConfigFactory.load().getConfig("grocery-store"))
   implicit val timeout: Timeout = Settings.webServiceTimeout
-  implicit val system = ActorSystem("store-akka-stream", ConfigFactory.load().getConfig("grocery-store"))
   implicit val ec = system.dispatcher
 
   implicit val itemRepo = new ItemMongoRepo(Settings.dbName, Item.collectionName) with SalatRepository {
@@ -37,7 +37,7 @@ object DemoActorSystem extends App with StrictLogging {
   
   val itemWriter = system.actorOf(ItemWriterActor.props(bundleKeeper), ItemWriterActor.name)
   
-  val itemReaderRouter = system.actorOf(ItemReaderRouter.props(itemRepo), ItemReaderRouter.name)
+  val itemReaderRouter = system.actorOf(ItemReaderRouter.props, ItemReaderRouter.name)
   
   val shoppingcartActor = system.actorOf(ShoppingcartActor.props(bundleKeeper, itemReaderRouter), ShoppingcartActor.name)
   

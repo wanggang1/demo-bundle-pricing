@@ -18,7 +18,6 @@ class ItemReaderActorUnitSpec extends ActorSpec with ImplicitSender with MockFac
   import BundleActor._
   
   "A ItemReaderActor" must "return an item when existing in database" in new Ctx {
-    val itemName = "PeanutButter"
     Given("itemRepo that returns an item by key")
     (itemRepo.getByKey _).expects(peanutbutter.name).returning(Some(peanutbutter)).once
     
@@ -33,7 +32,6 @@ class ItemReaderActorUnitSpec extends ActorSpec with ImplicitSender with MockFac
   }
   
   it must "return ItemNotFound when item is not existing in database" in new Ctx {
-    val itemName = "PeanutButter"
     Given("itemRepo that returns None by key")
     (itemRepo.getByKey _).expects(peanutbutter.name).returning(None).once
     

@@ -11,9 +11,7 @@ import com.bundlepricing.repos.ItemMongoRepo
 
 object ItemReaderRouter {
   
-  def props(itemRepo: ItemMongoRepo)
-           (implicit timeout: Timeout, execContext: ExecutionContext) =
-    Props(new ItemReaderRouter(itemRepo))
+  def props(implicit itemRepo: ItemMongoRepo, timeout: Timeout, execContext: ExecutionContext) = Props(new ItemReaderRouter)
   
   val name = "item-reader-router"
   
@@ -21,8 +19,7 @@ object ItemReaderRouter {
   case class ItemResults(items: List[Item])
 }
 
-class ItemReaderRouter(itemRepo: ItemMongoRepo)
-                      (implicit timeout: Timeout, execContext: ExecutionContext)
+class ItemReaderRouter(implicit itemRepo: ItemMongoRepo, timeout: Timeout, execContext: ExecutionContext)
   extends Actor with Stash with ActorLogging {
 
   import akka.pattern.pipe
