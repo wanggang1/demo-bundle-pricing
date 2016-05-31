@@ -28,7 +28,7 @@ class ItemReaderRouter(implicit itemRepo: ItemMongoRepo, timeout: Timeout, execC
   
   var router = {
     val routees = Vector.fill(5) {
-      val r = context.actorOf(ItemReaderActor.props(itemRepo))
+      val r = context.actorOf(ItemReaderActor.props)
       context watch r
       ActorRefRoutee(r)
     }
@@ -84,7 +84,7 @@ class ItemReaderRouter(implicit itemRepo: ItemMongoRepo, timeout: Timeout, execC
   
   private def updateRoutee(a: ActorRef) = {
     router = router.removeRoutee(a)
-    val r = context.actorOf(ItemReaderActor.props(itemRepo))
+    val r = context.actorOf(ItemReaderActor.props)
     context watch r
     router = router.addRoutee(r)
   }
