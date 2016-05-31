@@ -11,7 +11,7 @@ class BundleSpecs extends UnitSpec with TestData {
   
   "Bundle" must "generate bundle key with given items" in {
     Given("items List(Milk, Bread, Apple, Bread)")
-    val items = List(Milk, Bread, Apple, Bread)
+    val items = List(milk, bread, apple, bread)
 
     Then("the key must be MilkBreadAppleBread")
     bundleKey(items) mustBe "MilkBreadAppleBread"
@@ -19,7 +19,7 @@ class BundleSpecs extends UnitSpec with TestData {
 
   it must "generate collection of keys for permutaion of items" in {
     Given("items List(Milk, Bread, Apple, Bread)")
-    val items = List(Milk, Bread, Apple, Bread)
+    val items = List(milk, bread, apple, bread)
 
     Then("there must be 12 possible keys")
     val possibleKeys = keyPermutations(items)

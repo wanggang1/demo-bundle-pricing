@@ -10,7 +10,7 @@ class BundleMemoryRepoSpecs extends UnitSpec with TestData {
 
   "BundleRepo" must "retrieve Key from entity" in new BundleRepoTestCxt {
     Given("a bundle of Bread and Milk")
-    val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
     
     Then("the Key must be MilkBread")
     bundleRepoComponent.bundleRepo.key(bundle) mustBe "MilkBread"
@@ -20,7 +20,7 @@ class BundleMemoryRepoSpecs extends UnitSpec with TestData {
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
-    val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     Then("bundle must be retrieved using Key 'MilkBread'")
@@ -31,7 +31,7 @@ class BundleMemoryRepoSpecs extends UnitSpec with TestData {
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
-    val bundle = Bundle(List(Milk, Bread), buy1Get2ndHalf)
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     Then("None must be retrieved using Key 'AppleApple'")
@@ -42,11 +42,11 @@ class BundleMemoryRepoSpecs extends UnitSpec with TestData {
     Given("instance of BundleRepo")
 
     When("insert three bundles")
-    val bundle1 = Bundle(List(Milk, Bread), buy1Get2ndHalf)
+    val bundle1 = Bundle(List(milk, bread), buy1Get2ndHalf)
     bundleRepoComponent.bundleRepo.insert(bundle1)
-    val bundle2 = Bundle(List(Apple, Apple), buy1Get1Free)
+    val bundle2 = Bundle(List(apple, apple), buy1Get1Free)
     bundleRepoComponent.bundleRepo.insert(bundle2)
-    val bundle3 = Bundle(List(Cereal, Cereal, Cereal, Cereal), buy3Get4thFree)
+    val bundle3 = Bundle(List(cereal, cereal, cereal, cereal), buy3Get4thFree)
     bundleRepoComponent.bundleRepo.insert(bundle3)
     
     Then("getAll must return all three Bundles")

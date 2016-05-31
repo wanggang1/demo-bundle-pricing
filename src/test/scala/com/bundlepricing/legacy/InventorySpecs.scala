@@ -61,8 +61,8 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Given("instance of Inventory")
 
     When("a bundled price is added")
-    val expected = Bundle(List(Milk, Bread), buy1Get2ndHalf)
-    Await.ready(inventory.addBundledPrice(List(Milk, Bread), buy1Get2ndHalf), 100 milliseconds)
+    val expected = Bundle(List(milk, bread), buy1Get2ndHalf)
+    Await.ready(inventory.addBundledPrice(List(milk, bread), buy1Get2ndHalf), 100 milliseconds)
 
     Then("the bundle must be in BundleRepo")
     inventory.bundleRepo.getByKey("MilkBread") match {
@@ -78,10 +78,10 @@ class InventorySpecs extends UnitSpec with TestData with ScalaFutures {
     Given("instance of Inventory")
 
     When("add bundled prices")
-    val expected1 = Bundle(List(Milk, Bread), buy1Get2ndHalf)
-    Await.ready(inventory.addBundledPrice(List(Milk, Bread), buy1Get2ndHalf), 100 milliseconds)
-    val expected2 = Bundle(List(Cereal, Cereal, Milk), buy2Get3rdHalf)
-    Await.ready(inventory.addBundledPrice(List(Cereal, Cereal, Milk), buy2Get3rdHalf), 100 milliseconds)
+    val expected1 = Bundle(List(milk, bread), buy1Get2ndHalf)
+    Await.ready(inventory.addBundledPrice(List(milk, bread), buy1Get2ndHalf), 100 milliseconds)
+    val expected2 = Bundle(List(cereal, cereal, milk), buy2Get3rdHalf)
+    Await.ready(inventory.addBundledPrice(List(cereal, cereal, milk), buy2Get3rdHalf), 100 milliseconds)
 
     Then("getBundles must return all bundles associated with bundle key permutation")
     val resultFuture = inventory.getBundles
