@@ -1,6 +1,7 @@
 package com.bundlepricing.repos
 
 trait RepoMetaData {
+  type Id <: AnyRef //Entity's unique identifier
   type Entity <: AnyRef // Domain object with an unique identifier
   type Key <: AnyRef
   

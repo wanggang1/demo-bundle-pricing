@@ -4,6 +4,8 @@ import com.mongodb.casbah.MongoClient
 import com.bundlepricing.{TestData, UnitSpec}
 import com.bundlepricing.repos.{ItemRepoComponent, ItemMongoRepo, SalatRepository}
 
+import squants.market.USD
+
 /**
  * Unit tests for ItemRepo with SalatRepository
  * 
@@ -27,6 +29,14 @@ class ItemSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with Tes
 
     Then("Bread must be retrieved using Key 'Bread'")
     itemRepoComponent.itemRepo.getByKey("Bread") mustBe Some(bread)
+  }
+  
+  it must "retrieve item by id" in new ItemRepoTestCxt {
+    Given("instance of ItemRepo and Item(\"Bread\", 1.99) in MongoBD")
+    itemRepoComponent.itemRepo.insert(bread)
+
+    Then("Bread must be retrieved using id")
+    itemRepoComponent.itemRepo.get(bread.id) mustBe Some(bread)
   }
   
   it must "retrieve None if Key is not found in repo" in new ItemRepoTestCxt {
@@ -53,6 +63,29 @@ class ItemSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with Tes
     result("Apple") mustBe apple
     result("Milk") mustBe milk
     result("Bread") mustBe bread
+  }
+  
+  it must "delete item by id" in new ItemRepoTestCxt {
+    Given("instance of ItemRepo and Item(\"Bread\", 1.99) in MongoBD")
+    itemRepoComponent.itemRepo.insert(bread)
+    
+    When("delete Item(\"Bread\", 1.99) by id")
+    itemRepoComponent.itemRepo.delete(bread.id)
+    
+    Then("Bread must NOT be in MongoBD")
+    itemRepoComponent.itemRepo.get(bread.id) mustBe None
+  }
+  
+  it must "update item in MongoDB" in new ItemRepoTestCxt {
+    Given("instance of ItemRepo and Item(\"Bread\", 1.99) in MongoBD")
+    itemRepoComponent.itemRepo.insert(bread)
+    
+    When("update Item(\"Bread\", 1.99) with new price $2.05")
+    val breadNewPrice = bread.copy(price = USD(2.05))
+    itemRepoComponent.itemRepo.upsert(breadNewPrice)
+    
+    Then("Bread must have new price")
+    itemRepoComponent.itemRepo.get(bread.id) mustBe Some(breadNewPrice)
   }
   
   class ItemRepoTestCxt {

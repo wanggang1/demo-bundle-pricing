@@ -36,14 +36,13 @@ trait ItemRoute extends Directives with DomainDirectives with PlayJsonSupport {
           }
         }
       } ~
-      /*
       path(MongoObjectId ~ Slash.?) { itemId =>
         repoEntity(repo.get(itemId)) { item =>
           (post & entity(as[PartialItem])) {
             domainValidate(_){ partial ⇒ 
               complete {
                 Future {
-                  repo.upsert(station.copyPartial(partial))
+                  repo.upsert(item.copyPartial(partial))
                   StatusCodes.OK
                 }
               }
@@ -59,8 +58,6 @@ trait ItemRoute extends Directives with DomainDirectives with PlayJsonSupport {
           }
         }
       } ~
-      * 
-      */
       path(Segment ~ Slash.?) { itemName ⇒
         get { 
           repoEntity(repo.getByKey(itemName)) { item =>

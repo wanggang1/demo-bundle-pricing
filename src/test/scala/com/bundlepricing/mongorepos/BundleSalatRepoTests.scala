@@ -5,6 +5,7 @@ import com.bundlepricing.domains._
 import com.bundlepricing.repos.{BundleRepoComponent, BundleMongoRepo, SalatRepository}
 
 import com.mongodb.casbah.MongoClient
+import squants.market.USD
 
 /**
  * Unit tests for BundleRepo with SalatRepository
@@ -31,6 +32,15 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
     
     Then("bundle must be retrieved using Key 'MilkBread'")
     bundleRepoComponent.bundleRepo.getByKey("MilkBread") mustBe Some(bundle)
+  }
+  
+  it must "retrieve Bundle by id" in new BundleRepoTestCxt {
+    Given("instance of BundleRepo a bundle of Bread and Milk inserted")
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    bundleRepoComponent.bundleRepo.insert(bundle)
+    
+    Then("bundle must be retrieved id")
+    bundleRepoComponent.bundleRepo.get(bundle.id) mustBe Some(bundle)
   }
   
   it must "retrieve None if Key is not found in repo" in new BundleRepoTestCxt {
@@ -63,6 +73,31 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
     result("CerealCerealCerealCereal") mustBe bundle3
   }
 
+  it must "delete Bundle by id" in new BundleRepoTestCxt {
+    Given("instance of BundleRepo and a bundle of Milk and Bread")
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    bundleRepoComponent.bundleRepo.insert(bundle)
+    
+    When("delete the bundle by id")
+    bundleRepoComponent.bundleRepo.delete(bundle.id)
+    
+    Then("the bundle must NOT be in MongoBD")
+    bundleRepoComponent.bundleRepo.get(bundle.id) mustBe None
+  }
+  
+  it must "update Bundle in MongoDB" in new BundleRepoTestCxt {
+    Given("instance of BundleRepo and a bundle of Milk and Bread")
+    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    bundleRepoComponent.bundleRepo.insert(bundle)
+    
+    When("update the bundle with new price $0.99")
+    val bundleNewPrice = bundle.copy(price = USD(0.99))
+    bundleRepoComponent.bundleRepo.upsert(bundleNewPrice)
+    
+    Then("this bundle must have new price")
+    bundleRepoComponent.bundleRepo.get(bundle.id) mustBe Some(bundleNewPrice)
+  }
+  
   class BundleRepoTestCxt {
     import java.util.UUID
     
