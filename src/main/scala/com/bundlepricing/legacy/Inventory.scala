@@ -1,6 +1,9 @@
 package com.bundlepricing.legacy
 
+import org.bson.types.ObjectId
 import scala.concurrent.{ExecutionContext, Future, Promise}
+import squants.market.USD
+
 import com.bundlepricing.repos._
 import com.bundlepricing.domains._
 
@@ -8,7 +11,7 @@ class Inventory(implicit ec: ExecutionContext) {
   self: ItemRepoComponent with BundleRepoComponent =>
     
   def addItem(name: String, price: Double): Future[Unit] = Future {
-    val item = Item(name, price)
+    val item = Item(new ObjectId, name, USD(price))
     itemRepo.insert(item)
     
     val bundle = Bundle(List(item), unitPrice)
