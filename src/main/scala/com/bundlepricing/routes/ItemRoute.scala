@@ -14,7 +14,7 @@ import com.bundlepricing.domains._
 
 trait ItemRoute extends Directives with DomainDirectives with PlayJsonSupport {
 
-  def weatherStationRoute(repo: ItemMongoRepo)(implicit ec: ExecutionContext, timeout: Timeout, log: LoggingContext) = {
+  def itemRoute(repo: ItemMongoRepo)(implicit ec: ExecutionContext, timeout: Timeout, log: LoggingContext) = {
     // format: OFF
     pathPrefix("bundlepricing" / "items") {
       pathEndOrSingleSlash {
