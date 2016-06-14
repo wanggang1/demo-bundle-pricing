@@ -90,7 +90,7 @@ class ItemRouteTests extends RouteSpec
     (itemRepo.upsert _).expects(modified).returning(EntityUpdated)
 
     When("request is made to modify Item milk")
-    Post(s"$rootPath/${milk.id}", partial) ~>
+    Post(s"$rootPath/${milk.id.toString}", partial) ~>
       addHeader("Accept", "application/json") ~>
       itemRoute(itemRepo) ~>
       check {
@@ -105,7 +105,7 @@ class ItemRouteTests extends RouteSpec
     (itemRepo.delete _).expects(apple.id)
 
     When("request is made to delete this Item")
-    Delete(s"$rootPath/${apple.id}") ~>
+    Delete(s"$rootPath/${apple.id.toString}") ~>
       addHeader("Accept", "application/json") ~>
       itemRoute(itemRepo) ~>
       check {
@@ -131,6 +131,23 @@ class ItemRouteTests extends RouteSpec
       }
   }
 
+  it must ("get an existing Item by id") in new RouteCtx {
+    Given("an existing Item cereal")
+    (itemRepo.get _).expects(cereal.id).returning(Some(cereal))
+
+    When("request is made to get Item by id")
+    Get(s"$rootPath/${cereal.id.toString}") ~>
+      addHeader("Accept", "application/json") ~>
+      itemRoute(itemRepo) ~>
+      check {
+        Then("status code 200 is returned")
+        status mustBe StatusCodes.OK
+        And("Item cereal is returned")
+        val response = responseAs[Item]
+        response mustBe cereal
+      }
+  }
+  
   trait RouteCtx {
     import com.bundlepricing.repos.Implicits.Salat._
     

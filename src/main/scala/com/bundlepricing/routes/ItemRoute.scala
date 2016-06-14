@@ -55,6 +55,9 @@ trait ItemRoute extends Directives with DomainDirectives with PlayJsonSupport {
                 StatusCodes.OK
               }
             }
+          } ~
+          get {
+            complete(StatusCodes.OK, item)
           }
         }
       } ~
