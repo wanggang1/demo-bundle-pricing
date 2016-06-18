@@ -40,10 +40,7 @@ package object domains {
   }
 
   type Pricing = List[Item] => Double
-  
-  /**
-   * define common discount pricing
-   */
+
   val unitPrice: Pricing = (items: List[Item]) => {
     require(items.size == 1)
     items.head.price.value

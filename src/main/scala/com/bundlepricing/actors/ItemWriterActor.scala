@@ -43,7 +43,8 @@ class ItemWriterActor(itemRepo: ItemMongoRepo, bundleKeeper: ActorRef) extends A
     case AddItem(item) =>
       Try(itemRepo.insert(item)) match {
         case Success(_) => 
-          val bundle = Bundle(List(item), unitPrice)
+          val unitPrice = PricingPolicy(item.name, item.price.amount.toDouble, 1.0)
+          val bundle = Bundle.createBundle(List(unitPrice))
           bundleKeeper ! AddBundle(bundle)
           sender ! AddItemSuccess
         case Failure(_) =>

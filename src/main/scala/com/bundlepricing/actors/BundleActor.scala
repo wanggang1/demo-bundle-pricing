@@ -25,7 +25,7 @@ object BundleActor {
     val pairs = 
       for {
         bundle <- bundles.values
-        keyPermutation <- Bundle.keyPermutations(bundle.items)
+        keyPermutation <- Bundle.keyPermutations(bundle.pricings.map(_.itemName))
       } yield (keyPermutation -> bundle)
         
     pairs.toMap
@@ -37,7 +37,7 @@ object BundleActor {
   def showBundles(bundles: Map[String, Bundle])(implicit log: LoggingAdapter): Unit = {
     import Bundle._
     log.info("-----------------Bundled Price Catalog------------------")
-    bundles.values foreach { bundle => log.info(s"${bundleKey(bundle.items)} -> $$${bundle.price}") }
+    bundles.values foreach { bundle => log.info(s"${uniqueKey(bundle.pricings)} -> $$${price(bundle)}") }
     log.info("")
   }
   

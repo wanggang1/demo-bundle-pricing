@@ -30,7 +30,7 @@ object PricingActor {
   def bundleDefined(groupedItems: List[Item], bundles: Map[String, Bundle]) = bundles.contains(bundleKey(groupedItems)) 
   
   def convertToBundles(purchasedItems: List[Item], applicableBundles: List[Bundle]): List[List[Bundle]] = {
-    val purchasePermutations: List[String] = keyPermutations(purchasedItems)
+    val purchasePermutations: List[String] = keyPermutations(purchasedItems.map(_.name))
     
     subsets(applicableBundles).filter {
       bundles => purchasePermutations.contains( bundles.map(_.key).mkString )
@@ -38,8 +38,8 @@ object PricingActor {
   }
   
   def optimizedPrice(purchases: List[List[Bundle]]): Double = {
-    val costs = purchases.map { _.foldLeft(0.0)(_ + _.price.value) }
-    BigDecimal(costs.min).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+    val costs = purchases.map { _.foldLeft(0.0)((acc, b) => price(b) + acc) }
+    costs.min
   }
   
   /**
@@ -57,7 +57,7 @@ object PricingActor {
   private def showPurchases(bundleCombos: List[List[Bundle]])(implicit log: LoggingAdapter) = {
     log.info(s"possible bundled prices: ${bundleCombos.size}")
     bundleCombos.map { purchase: List[Bundle] =>
-      val cost = purchase.foldLeft(0.0)(_ + _.price.value)
+      val cost = purchase.foldLeft(0.0)((acc, b) => price(b) + acc)
       log.info(s"$purchase -> $$$cost")
     }
     log.info("")

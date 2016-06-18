@@ -14,10 +14,11 @@ import squants.market.USD
  * picked up by running 'sbt test' because class name is not ended with 'Spec(s)???
  */
 class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with TestData {
-
+  import Bundle._
+  
   "BundleSalatRepo" must "retrieve Key from entity" in new BundleRepoTestCxt {
     Given("a bundle of Bread and Milk")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     
     Then("the Key must be MilkBread")
     bundleRepoComponent.bundleRepo.key(bundle) mustBe "MilkBread"
@@ -27,7 +28,7 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     Then("bundle must be retrieved using Key 'MilkBread'")
@@ -36,7 +37,7 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
   
   it must "retrieve Bundle by id" in new BundleRepoTestCxt {
     Given("instance of BundleRepo a bundle of Bread and Milk inserted")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     Then("bundle must be retrieved id")
@@ -47,7 +48,7 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
     Given("instance of BundleRepo")
 
     When("insert a bundle of Bread and Milk")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     Then("None must be retrieved using Key 'AppleApple'")
@@ -58,11 +59,11 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
     Given("instance of BundleRepo")
 
     When("insert three bundles")
-    val bundle1 = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle1 = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle1)
-    val bundle2 = Bundle(List(apple, apple), buy1Get1Free)
+    val bundle2 = createBundle(List(applePrice, appleFree))
     bundleRepoComponent.bundleRepo.insert(bundle2)
-    val bundle3 = Bundle(List(cereal, cereal, cereal, cereal), buy3Get4thFree)
+    val bundle3 = createBundle(List(cerealPrice, cerealPrice, cerealPrice, cerealFree))
     bundleRepoComponent.bundleRepo.insert(bundle3)
     
     Then("getAll must return all three Bundles")
@@ -75,7 +76,7 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
 
   it must "delete Bundle by id" in new BundleRepoTestCxt {
     Given("instance of BundleRepo and a bundle of Milk and Bread")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle)
     
     When("delete the bundle by id")
@@ -87,11 +88,11 @@ class BundleSalatRepoTests(mongoClient: ⇒ MongoClient) extends UnitSpec with T
   
   it must "update Bundle in MongoDB" in new BundleRepoTestCxt {
     Given("instance of BundleRepo and a bundle of Milk and Bread")
-    val bundle = Bundle(List(milk, bread), buy1Get2ndHalf)
+    val bundle = createBundle(List(milkPrice, breadHalf))
     bundleRepoComponent.bundleRepo.insert(bundle)
     
-    When("update the bundle with new price $0.99")
-    val bundleNewPrice = bundle.copy(price = USD(0.99))
+    When("update the bundle with new pricing $0.99")
+    val bundleNewPrice = bundle.copy(pricings = List(milkPrice, breadFree))
     bundleRepoComponent.bundleRepo.upsert(bundleNewPrice)
     
     Then("this bundle must have new price")

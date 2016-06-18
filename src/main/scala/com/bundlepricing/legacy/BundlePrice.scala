@@ -23,7 +23,7 @@ object BundlePrice {
   def showPurchases(bundleCombos: List[List[Bundle]]) = {
     println(s"possible bundled prices: ${bundleCombos.size}")
     bundleCombos.map { purchase: List[Bundle] =>
-      val cost = purchase.foldLeft(0.0)(_ + _.price.value)
+      val cost = purchase.foldLeft(0.0){(acc, b) => Bundle.price(b) + acc}
       println(s"$purchase -> $$$cost")
     }
     println("")
@@ -34,7 +34,7 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   import BundlePrice._
   import CombinatorialFunction._
   import Bundle._
-  
+
   def pricing(purchasedItems: List[Item]): Future[Double] = {
     val bundlesFuture = inventory.getBundles
     for {
@@ -55,7 +55,7 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   def bundleDefined(groupedItems: List[Item], bundles: Map[String, Bundle]) = bundles.contains(bundleKey(groupedItems)) 
   
   def convertToBundles(purchasedItems: List[Item], applicableBundles: List[Bundle]): List[List[Bundle]] = {
-    val purchasePermutations: List[String] = keyPermutations(purchasedItems)
+    val purchasePermutations: List[String] = keyPermutations(purchasedItems.map(_.name))
     
     subsets(applicableBundles).filter {
       bundles: List[Bundle] => purchasePermutations.contains( bundles.map(_.key).mkString )
@@ -63,8 +63,8 @@ class BundlePrice(implicit inventory: Inventory, ec: ExecutionContext)  {
   }
   
   def optimizedPrice(purchases: List[List[Bundle]]): Double = {
-    val costs = purchases.map { _.foldLeft(0.0)(_ + _.price.value) }
-    BigDecimal(costs.min).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
+    val costs = purchases.map { _.foldLeft(0.0)((acc, b) => price(b) + acc) }
+    costs.min
   }
   
 }
