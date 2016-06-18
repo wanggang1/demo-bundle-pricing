@@ -15,11 +15,12 @@ class BundleActorUnitSpec extends ActorSpec with ImplicitSender with MockFactory
 
   import scala.concurrent.ExecutionContext.Implicits.global
   import BundleActor._
+  import Bundle._
 
-  val bundleMilk = Bundle(List(milk), unitPrice)
-  val bundleBread = Bundle(List(bread), unitPrice)
-  val bundleBreadBread = Bundle(List(bread, bread), buy1Get1Free)
-  val bundleMilkBread = Bundle(List(milk, bread), buy1Get1Free)
+  val bundleMilk = createBundle(List(milkPrice))
+  val bundleBread = createBundle(List(breadPrice))
+  val bundleBreadBread = createBundle(List(breadPrice, breadFree))
+  val bundleMilkBread = createBundle(List(milkPrice, breadFree))
   val baseBundles = Map(
     Bundle.bundleKey(List(milk)) -> bundleMilk,
     Bundle.bundleKey(List(bread)) -> bundleBread,
@@ -74,7 +75,7 @@ class BundleActorUnitSpec extends ActorSpec with ImplicitSender with MockFactory
   }
   
   it must "add a new bundle" in new Ctx {
-    val newBundle = Bundle(List(cereal), unitPrice)
+    val newBundle = createBundle(List(cerealPrice))
     Given("bundleRepo that returns baseBundles and insert new bundles")
     inSequence {
       //NOTE: getAll only called once at actor initiation time

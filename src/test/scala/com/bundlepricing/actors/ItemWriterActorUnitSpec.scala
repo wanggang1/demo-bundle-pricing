@@ -38,7 +38,7 @@ class ItemWriterActorUnitSpec extends ActorSpec with ImplicitSender with MockFac
     
     And("bundleKeeper must receive an AddBundle message with unitPrice")
     bundleKeeper.expectMsgPF(500 millis, "new bundle with unitPrice"){
-      case AddBundle(Bundle(_, List(peanutbutter), "PeanutButter", unitPrice)) => ()
+      case AddBundle(Bundle(_, "PeanutButter", List(pbPrice))) => ()
     }
 
   }

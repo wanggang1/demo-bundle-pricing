@@ -22,7 +22,7 @@ class BundleSpecs extends UnitSpec with TestData {
     val items = List(milk, bread, apple, bread)
 
     Then("there must be 12 possible keys")
-    val possibleKeys = keyPermutations(items)
+    val possibleKeys = keyPermutations(items.map(_.name))
     possibleKeys.size mustBe 12
     
     And("must contain all possible keys")

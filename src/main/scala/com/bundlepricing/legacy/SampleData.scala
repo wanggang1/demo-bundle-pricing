@@ -23,37 +23,79 @@ object SampleData {
     val slicedCheese = inventory.getItem("SlicedCheese")
     val peanutbutter = inventory.getItem("PeanutButter")
 
+    // buy 2 apples get peanutbutter half
     for {
       a <- apple
+      aPricing = PricingPolicy(a.name, a.price.amount.toDouble, 1.0)
       p <- peanutbutter
-    } yield inventory.addBundledPrice(List(a, a, p), buy2Get3rdHalf)
+      pbPricing =  PricingPolicy(p.name, p.price.amount.toDouble, 0.5)
+    } yield inventory.addBundledPrice(List(aPricing, aPricing, pbPricing))
 
+    //buy 2 breads get peanutbutter half
     for {
       b <- bread
+      bPricing = PricingPolicy(b.name, b.price.amount.toDouble, 1.0)
       p <- peanutbutter
-    } yield inventory.addBundledPrice(List(b, b, p), buy2Get3rdHalf)
+      pbPricing =  PricingPolicy(p.name, p.price.amount.toDouble, 0.5)
+    } yield inventory.addBundledPrice(List(bPricing, bPricing, pbPricing))
 
+    // buy 3 cereals get milk free
     for {
       c <- cereal
+      cPricing = PricingPolicy(c.name, c.price.amount.toDouble, 1.0)
       m <- milk
-    } yield inventory.addBundledPrice(List(c, c, c, m), buy3Get4thFree)
+      mPricing = PricingPolicy(m.name, m.price.amount.toDouble, 0.0)
+    } yield inventory.addBundledPrice(List(cPricing, cPricing, cPricing, mPricing))
 
+    //buy 2 milks get slicedcheese half
     for {
       m <- milk
+      mPricing = PricingPolicy(m.name, m.price.amount.toDouble, 1.0)
       sc <- slicedCheese
-    } yield inventory.addBundledPrice(List(m, m, sc), buy2Get3rdHalf)
+      scPricing = PricingPolicy(sc.name, sc.price.amount.toDouble, 0.5)
+    } yield inventory.addBundledPrice(List(mPricing, mPricing, scPricing))
 
-    apple flatMap {a => inventory.addBundledPrice(List.fill(4)(a), buy3Get4thFree)}
+    //buy 3 apples get the 4th apple free
+    apple flatMap {a =>
+      val aPricing = PricingPolicy(a.name, a.price.amount.toDouble, 1.0)
+      val aFree = PricingPolicy(a.name, a.price.amount.toDouble, 0.0)
+      inventory.addBundledPrice(List(aPricing, aPricing, aPricing, aFree))
+    }
 
-    bread flatMap {b => inventory.addBundledPrice(List.fill(2)(b), buy1Get1Free)}
+    //buy 1 bread get the 2nd one free
+    bread flatMap {b => 
+      val bPricing = PricingPolicy(b.name, b.price.amount.toDouble, 1.0)
+      val bFree = PricingPolicy(b.name, b.price.amount.toDouble, 0.0)
+      inventory.addBundledPrice(List(bPricing, bFree))
+    }
 
-    cereal flatMap {c => inventory.addBundledPrice(List.fill(3)(c), buy2Get3rdHalf)}
+    //buy 2 cereals get the 3rd half
+    cereal flatMap {c =>
+      val cPricing = PricingPolicy(c.name, c.price.amount.toDouble, 1.0)
+      val cHalf = PricingPolicy(c.name, c.price.amount.toDouble, 0.5)
+      inventory.addBundledPrice(List(cPricing, cPricing, cHalf))
+    }
 
-    milk flatMap {m => inventory.addBundledPrice(List.fill(2)(m), buy1Get1Free)}
+    //buy 1 milk get the 2nd milk free
+    milk flatMap {m =>
+      val mPricing = PricingPolicy(m.name, m.price.amount.toDouble, 1.0)
+      val mFree = PricingPolicy(m.name, m.price.amount.toDouble, 0.0)
+      inventory.addBundledPrice(List(mPricing, mFree))
+    }
 
-    peanutbutter flatMap {p => inventory.addBundledPrice(List.fill(2)(p), buy1Get2ndHalf)}
+    //buy 1 peanutbutter get the 2nd half
+    peanutbutter flatMap {p =>
+      val pbPricing =  PricingPolicy(p.name, p.price.amount.toDouble, 1.0)
+      val pbHalf =  PricingPolicy(p.name, p.price.amount.toDouble, 0.5)
+      inventory.addBundledPrice(List(pbPricing, pbHalf))
+    }
 
-    slicedCheese flatMap { sc => inventory.addBundledPrice(List.fill(2)(sc), buy1Get2ndHalf)}
+    //buy 1 slicedCheese get the 2nd half
+    slicedCheese flatMap { sc =>
+      val scPricing = PricingPolicy(sc.name, sc.price.amount.toDouble, 1.0)
+      val scHalf = PricingPolicy(sc.name, sc.price.amount.toDouble, 0.5)
+      inventory.addBundledPrice(List(scPricing, scHalf))
+    }
   }
 
   def shoppingCart(inventory: Inventory)(implicit ec: ExecutionContext): Future[List[Item]] = {
