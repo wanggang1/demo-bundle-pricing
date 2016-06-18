@@ -39,6 +39,7 @@ package object domains {
     def serialize(q: T) = DBObject("value" -> q.to(unitOfMeasure), "unit" -> unitOfMeasure.symbol)
   }
 
+  ///////////////// Below are obsolete, Bundle pricing now uses PricingPolicy case class /////////////////
   type Pricing = List[Item] => Double
 
   val unitPrice: Pricing = (items: List[Item]) => {
