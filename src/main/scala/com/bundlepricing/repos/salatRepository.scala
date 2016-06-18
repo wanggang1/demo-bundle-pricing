@@ -21,8 +21,7 @@ trait SalatRepository extends Repository {
     //TODO: Salat decided to disable "ById" querying on compound ids to "protect" users who don't read the docs
     //TODO: When they fix it refactor out the boilerplate from this trait
     //TODO: See https://github.com/salat/salat/issues/110 and https://github.com/salat/salat/issues/86
-    //    salatDao.findOneById(id)
-    
+    //salatDao.findOneById(id)
     salatDao.findOne(idToDBObject(id))
   }
   
@@ -35,6 +34,15 @@ trait SalatRepository extends Repository {
   def insert(entity: Entity): Unit =
     salatDao.insert(entity)
 
+  def delete(id: Id): Unit =
+    //salatDao.removeById(id)
+    salatDao.remove(idToDBObject(id))
+  
+  def upsert(entity: Entity): UpsertStatus = {
+    val writeResult: WriteResult = salatDao.update(idToDBObject(id(entity)), salatDao.toDBObject(entity), upsert = true)
+    if (writeResult.isUpdateOfExisting) EntityUpdated else EntityInserted
+  }
+
   private type CaseClass = AnyRef with Product
 
   def idToDBObject(id: Id): DBObject =
@@ -43,13 +51,18 @@ trait SalatRepository extends Repository {
 }
 
 trait SalatRepoMataData extends RepoMetaData {
-  type Id <: AnyRef //Entity's unique identifier
+  type Id = ObjectId
   
   def dbName: String
   def collectionName: String
+  def id(entity: Entity): Id 
 
   implicit def mongoClient: MongoClient
   implicit def context: Context
   implicit def idManifest: Manifest[Id]
   implicit def entityManifest: Manifest[Entity]
 }
+
+sealed trait UpsertStatus
+case object EntityUpdated extends UpsertStatus
+case object EntityInserted extends UpsertStatus

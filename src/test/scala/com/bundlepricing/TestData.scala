@@ -1,15 +1,17 @@
 package com.bundlepricing
 
 import com.bundlepricing.domains._
+import org.bson.types.ObjectId
+import squants.market.USD
 
 trait TestData {
 
-  val milk = Item("Milk", 2.99)
-  val bread = Item("Bread", 1.99)
-  val cereal = Item("Cereal", 2.50)
-  val cheese = Item("SlicedCheese", 4.50)
-  val peanutbutter = Item("PeanutButter", 2.50)
-  val apple = Item("Apple", 1.00)
+  val milk = Item(new ObjectId, "Milk", USD(2.99))
+  val bread = Item(new ObjectId, "Bread", USD(1.99))
+  val cereal = Item(new ObjectId, "Cereal", USD(2.50))
+  val cheese = Item(new ObjectId, "SlicedCheese", USD(4.50))
+  val peanutbutter = Item(new ObjectId, "PeanutButter", USD(2.50))
+  val apple = Item(new ObjectId, "Apple", USD(1.00))
 
   val bundles = Map(
     Bundle.bundleKey(List(milk)) -> Bundle(List(milk), unitPrice),

@@ -20,7 +20,9 @@ trait ItemRepo extends RepoMetaData with Repository {
   type Entity = Item
                            
   val keyField = "name"
+  
   def key(entity: Item): Key = entity.name
+  def id(entity: Item) = entity.id
 }
 
 /**
@@ -31,8 +33,12 @@ trait ItemRepo extends RepoMetaData with Repository {
 abstract class ItemMongoRepo(val dbName: String = "", val collectionName: String = "")
                        (implicit val context: Context, val mongoClient: MongoClient)
                 extends SalatRepoMataData with ItemRepo {
-  type Id = ObjectId
-  
+
   val idManifest = implicitly[Manifest[Id]]
   val entityManifest = implicitly[Manifest[Entity]]
+  
+  //additional operation on MongoDB
+  def get(id: Id): Option[Entity]
+  def delete(id: Id): Unit
+  def upsert(entity: Entity): UpsertStatus
 }

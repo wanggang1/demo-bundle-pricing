@@ -49,7 +49,7 @@ object ActorSpec {
 abstract class RouteSpec extends UnitSpec with ScalatestRouteTest {
   import scala.concurrent.duration._
 
-  //implicit val routeTestTimeout = RouteTestTimeout(2 seconds)
+  implicit val routeTestTimeout = RouteTestTimeout(2 seconds)
 
   def shutdown(): Unit = ()
 

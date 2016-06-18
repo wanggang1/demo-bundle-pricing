@@ -20,7 +20,9 @@ trait BundleRepo extends RepoMetaData with Repository {
   type Entity = Bundle
 
   val keyField = "key"
+  
   def key(entity: Bundle): Key = entity.key
+  def id(entity: Bundle) = entity.id
 }
 
 /**
@@ -31,9 +33,12 @@ trait BundleRepo extends RepoMetaData with Repository {
 abstract class BundleMongoRepo(val dbName: String = "", val collectionName: String = "")
                               (implicit val context: Context, val mongoClient: MongoClient)
                extends SalatRepoMataData with BundleRepo {
-  type Id = ObjectId
-  
   val idManifest = implicitly[Manifest[Id]]
   val entityManifest = implicitly[Manifest[Entity]]
+  
+  //additional operation on MongoDB
+  def get(id: Id): Option[Entity]
+  def delete(id: Id): Unit
+  def upsert(entity: Entity): UpsertStatus
 }
   
