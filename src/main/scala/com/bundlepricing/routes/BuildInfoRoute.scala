@@ -7,6 +7,7 @@ import spray.routing.Directives
 
 trait BuildInfoRoute extends Directives with PlayJsonSupport {
 
+  //don't give context path because each micro service runs on designated port
   val buildInfoRoute =
     path("buildinfo" ~ Slash.?) {
       get {

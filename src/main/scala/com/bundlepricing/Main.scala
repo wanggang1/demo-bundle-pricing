@@ -27,17 +27,21 @@ object Main extends App with StrictLogging {
 
   //Init actor system
   implicit val actorSystem = ActorSystem("store-akka-stream", ConfigFactory.load().getConfig("grocery-store"))
+  
   import actorSystem.dispatcher
-
   implicit val webServiceTimeout = Settings.webServiceTimeout
+  
+  val bundleKeeper = actorSystem.actorOf(BundleActor.props, BundleActor.name)
+  val itemWriter = actorSystem.actorOf(ItemWriterActor.props(bundleKeeper), ItemWriterActor.name)
 
   //Init web service
   actorSystem.actorOf(Props(
     new WebServiceActor(
         Settings.host, 
         Settings.port,
-        itemRepo,
-        bundleRepo)), name = "web-service")
+        itemWriter,
+        bundleKeeper,
+        itemRepo)), name = "web-service")
 
   //Add hook for graceful shutdown
   sys.addShutdownHook {

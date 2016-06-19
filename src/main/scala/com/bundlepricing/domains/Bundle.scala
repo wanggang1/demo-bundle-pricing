@@ -2,7 +2,8 @@ package com.bundlepricing.domains
 
 import com.novus.salat.annotations.Key
 import org.bson.types.ObjectId
-import squants.market.{ Money, USD }
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 object Bundle {
           
@@ -29,11 +30,28 @@ object Bundle {
     BigDecimal(price).setScale(2, BigDecimal.RoundingMode.HALF_UP).toDouble
   }
   
+  ////Json serialization /////////////////
+  private val reads: Reads[Bundle] = {
+    val idReads = (__ \ 'id).read[ObjectId] orElse Reads.pure(new ObjectId)
+  
+    (idReads and
+      (__ \ 'key).read[String] and
+      (__ \ 'pricings).read[List[PricingPolicy]])(Bundle.apply _)
+  }
+
+  private val writes: Writes[Bundle] = Json.writes[Bundle]
+
+  implicit val formatter: Format[Bundle] = Format(reads, writes)
+
 }
 
 /**
  * will create _id in app have issue when app running on multiple instances of JVM???
  */
 case class Bundle(@Key("_id") id: ObjectId = new ObjectId, key: String, pricings: List[PricingPolicy])
+
+object PricingPolicy {
+  implicit val formatter: Format[PricingPolicy] = Json.format[PricingPolicy]
+}
 
 case class PricingPolicy(itemName: String, unitPrice: Double, discount: Double)

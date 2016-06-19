@@ -1,5 +1,6 @@
 package com.bundlepricing.routes
 
+import akka.actor.ActorRef
 import akka.util.Timeout
 import play.api.libs.json._
 import scala.concurrent.{ExecutionContext, Future}
@@ -14,7 +15,7 @@ import com.bundlepricing.domains._
 
 trait ItemRoute extends Directives with DomainDirectives with PlayJsonSupport {
 
-  def itemRoute(repo: ItemMongoRepo)(implicit ec: ExecutionContext, timeout: Timeout, log: LoggingContext) = {
+  def itemRoute(repo: ItemMongoRepo, itemActor: ActorRef)(implicit ec: ExecutionContext, timeout: Timeout, log: LoggingContext) = {
     // format: OFF
     pathPrefix("bundlepricing" / "items") {
       pathEndOrSingleSlash {

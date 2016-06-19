@@ -4,19 +4,21 @@ import com.bundlepricing.Settings
 import com.bundlepricing.repos._
 import com.bundlepricing.routes._
 
-import akka.actor.ActorLogging
+import akka.actor.{ActorLogging, ActorRef}
 import akka.io.IO
 import spray.can.Http
 import spray.httpx.PlayJsonSupport
 import spray.routing.{ ExceptionHandler, HttpServiceActor }
 
 class WebServiceActor(host: String, port: Int,
-  itemRepo: ItemMongoRepo, bundleRepo: BundleMongoRepo)
+  itemActor: ActorRef, bundleActor: ActorRef,
+  itemRepo: ItemMongoRepo)
     extends HttpServiceActor
     with ActorLogging
     with CORSDirectives
     with BuildInfoRoute
-    with ItemRoute {
+    with ItemRoute 
+    with BundleRoute {
   
   import WebServiceActor.exceptionHandler
 
@@ -30,7 +32,8 @@ class WebServiceActor(host: String, port: Int,
   def receive = runRoute(
     cors(EchoAllOriginsAccepted) {
       buildInfoRoute ~
-      itemRoute(itemRepo)
+      itemRoute(itemRepo, itemActor) ~
+      bundleRoute(bundleActor)
     })
     
 }

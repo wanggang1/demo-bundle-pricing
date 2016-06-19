@@ -15,11 +15,13 @@ object BundleActor {
   
   val name = "bundle-actor"
   
-  case object GetAllBundles
-  case class AddBundle(bundle: Bundle)
-  case object AddBundleSuccess
-  case object AddBundleFailed
-  case class AllBundles(all: Map[String, Bundle])
+  sealed trait BundleMessage
+  case object GetCachedBundles extends BundleMessage
+  case object GetAllBundles extends BundleMessage
+  case class AddBundle(bundle: Bundle) extends BundleMessage
+  case object AddBundleSuccess extends BundleMessage
+  case object AddBundleFailed extends BundleMessage
+  case class AllBundles(all: Map[String, Bundle]) extends BundleMessage
 
   def allKeyPermutations(bundles: Map[String, Bundle]): Map[String, Bundle] = {
     val pairs = 
@@ -57,6 +59,8 @@ class BundleActor(bundleRepo: BundleMongoRepo) extends Actor with ActorLogging  
   }
   
   def receive = {
+    case GetCachedBundles =>
+      sender ! AllBundles(bundles) 
     case GetAllBundles =>
       sender ! AllBundles( allKeyPermutations(bundles) )
     case AddBundle(bundle) =>
