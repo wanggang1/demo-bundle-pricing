@@ -20,7 +20,7 @@ class ShoppingcartActor(bundleActor: ActorRef, itemRouter: ActorRef)
                        (implicit execContext: ExecutionContext, timeout: Timeout)
   extends Actor with ActorLogging {
 
-  import akka.pattern.{ask, pipe}
+  import akka.pattern.ask
   import ShoppingcartActor._
   import ItemReaderRouter._
   import BundleActor._

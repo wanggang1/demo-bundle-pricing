@@ -1,22 +1,25 @@
-package com.bundlepricing
+package com.bundlepricing.actors
 
-import akka.actor.{ActorRef, ActorSystem}
-import akka.pattern.ask
+import akka.actor.ActorSystem
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.StrictLogging
 import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
-
 import com.bundlepricing.actors._
 import com.bundlepricing.domains._
 import com.bundlepricing.repos._
+import com.bundlepricing.Settings
+import com.bundlepricing.actors.ShoppingcartActor.Checkout
+import com.bundlepricing.repos.Implicits.Salat
+import com.mongodb.casbah.Imports
 
 /**
  * Demo Bundled Price ActorSystem
  */
 object DemoActorSystem extends App with StrictLogging {
 
+  import akka.pattern.ask
   import com.bundlepricing.repos.Implicits.Salat._
   import com.mongodb.casbah.Imports._
   

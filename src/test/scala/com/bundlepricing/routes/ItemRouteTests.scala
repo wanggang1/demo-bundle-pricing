@@ -5,6 +5,7 @@ import com.bundlepricing.domains.{ Item, PartialItem }
 import com.bundlepricing.repos._
 
 import akka.util.Timeout
+import akka.testkit.TestProbe
 import com.typesafe.scalalogging.StrictLogging
 import org.bson.types.ObjectId
 import org.scalamock.scalatest.MockFactory
@@ -49,7 +50,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made for all items")
     Get(s"$rootPath") ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 200 is returned")
         status mustBe StatusCodes.OK
@@ -71,7 +72,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made to create Item")
     Post(s"$rootPath", orangeJuice) ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 201 is returned")
         status mustBe StatusCodes.Created
@@ -92,7 +93,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made to modify Item milk")
     Post(s"$rootPath/${milk.id.toString}", partial) ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 200 is returned")
         status mustBe StatusCodes.OK
@@ -107,7 +108,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made to delete this Item")
     Delete(s"$rootPath/${apple.id.toString}") ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 200 is returned")
         status mustBe StatusCodes.OK
@@ -121,7 +122,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made to get Item by name")
     Get(s"$rootPath/${cereal.name}") ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 200 is returned")
         status mustBe StatusCodes.OK
@@ -138,7 +139,7 @@ class ItemRouteTests extends RouteSpec
     When("request is made to get Item by id")
     Get(s"$rootPath/${cereal.id.toString}") ~>
       addHeader("Accept", "application/json") ~>
-      itemRoute(itemRepo) ~>
+      itemRoute(itemRepo, itemWriter.ref) ~>
       check {
         Then("status code 200 is returned")
         status mustBe StatusCodes.OK
@@ -152,6 +153,7 @@ class ItemRouteTests extends RouteSpec
     import com.bundlepricing.repos.Implicits.Salat._
     
     val itemRepo = mock[ItemMongoRepo]
+    val itemWriter = TestProbe()
   }
 
 }

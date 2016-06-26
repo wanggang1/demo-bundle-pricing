@@ -40,7 +40,9 @@ class ItemReaderRouter(implicit itemRepo: ItemMongoRepo, timeout: Timeout, execC
   //setup matcher for type ItemFound and ItemNotFound
   val responseMatcher: PartialFunction[Any, ItemResult] = { 
     case i: ItemFound => i
-    case inf: ItemNotFound => inf
+    case inf: ItemNotFound =>
+      log.info(s"ItemNotFound ${inf.key}")
+      inf
   }
   
   def receive = {
