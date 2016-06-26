@@ -18,7 +18,7 @@ A customer shops in a grocery store, selects items and any quantity of an item, 
 ### Features
 
 * An Item has a unique name and a price.
-* A Bundle has a list of Items and a discount pricing for this bundle.
+* A Bundle has a unique key and a list of Item Pricings.
 * Ability to add an Item to store
 * Ability to query Item by name
 * Ability to add discount Bundle to store
@@ -28,9 +28,14 @@ A customer shops in a grocery store, selects items and any quantity of an item, 
 
 ### TODOs
 
-* User Input Validation
-* Exception Handling
-* Optimization
+* Item Add route need to use ItemWriterActor, so it also single BundleActor to add an unit price Bundle
+* Item Delete route need to use ItemWriterActor, so it also single BundleActor to delete all Bundles containing this item
+* Item Update route need to use ItemWriterActor, so it also single BundleActor to update all Bundles containing this item
+* add Bundle validation and PartialBundle for Bundle’s create/update routes
+* all Bundle routes must use BundleActor because BundleActor maintains a Bundle cache
+* BundleActor only delete unit price Bundle through Item deletion signal
+* BundeActor should use ItemReaderRouter to validate Item existence before adding/updating the bundle
+* add a route to calculate bundled price
 
 ### Possible Issues
 
