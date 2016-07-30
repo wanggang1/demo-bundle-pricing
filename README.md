@@ -13,7 +13,7 @@ This exercise is a common problem in e­commerce retail systems.  It is implemen
 
 ### User Stores
 
-A customer shops in a grocery store, selects items and any quantity of an item, then checks out.  In this store, certain groups of items can be taken together as a "bundle" with a discounted price (comparing to indvidusl item's unit price).  One example bundle is "buy 1 loaf of bread get the 2nd free".  Another bundle could be "buy two loaves of bread and get a jar of peanut butter half price".  The same item can appear in more than one bundle, therefore, a cart of items can be combined in more than one way.  The goal is to produce the lowest cost for a given cart of items.
+A customer shops in a grocery store, selects items and any quantity of an item, then checks out.  In this store, certain groups of items can be taken together as a "bundle" with a discounted price (comparing to indvidusl item's unit price).  One example bundle is "buy 1 loaf of bread get the 2nd free".  Another bundle could be "buy two loaves of bread and get a jar of peanut butter half price".  The same item can appear in more than one bundle, therefore, a shoppingcart can be combined in more than one way.  The goal is to produce the lowest cost for a given shoppingcart.
 
 ### Features
 
@@ -28,9 +28,9 @@ A customer shops in a grocery store, selects items and any quantity of an item, 
 
 ### TODOs
 
-* Item Add route need to use ItemWriterActor, so it also single BundleActor to add an unit price Bundle
-* Item Delete route need to use ItemWriterActor, so it also single BundleActor to delete all Bundles containing this item
-* Item Update route need to use ItemWriterActor, so it also single BundleActor to update all Bundles containing this item
+* Item Add route need to use ItemWriterActor, so it also uses single BundleActor to add an unit price Bundle
+* Item Delete route need to use ItemWriterActor, so it also uses single BundleActor to delete all Bundles containing this item
+* Item Update route need to use ItemWriterActor, so it also uses single BundleActor to update all Bundles containing this item
 * add Bundle validation and PartialBundle for Bundle’s create/update routes
 * all Bundle routes must use BundleActor because BundleActor maintains a Bundle cache
 * BundleActor only delete unit price Bundle through Item deletion signal
